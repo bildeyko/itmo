@@ -1,0 +1,13 @@
+<project name="MarksInFigure" default="compile">
+
+    <target name="make_dirs">
+        <mkdir dir="../build"/>
+        <mkdir dir="../build/classes"/>
+    </target>
+
+    <target name="compile" description="compile java" depends="make_dirs">
+        <javac destdir="../build/classes">
+            <src path="../src"/>
+        </javac>
+    </target>
+</project>

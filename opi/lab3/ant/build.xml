@@ -1,13 +1,91 @@
-<project name="MarksInFigure" default="compile">
+<project name="MarksInFigure" basedir="..">
+    <property file="ant\build.properties" />
 
-    <target name="make_dirs">
-        <mkdir dir="../build"/>
-        <mkdir dir="../build/classes"/>
+    <path id="classpath.test">
+        <pathelement location="${classes.dir}"/>
+        <pathelement location="lib\hamcrest-core-1.3.jar"/>
+        <pathelement location="lib\junit-4.12-beta-3.jar"/>
+    </path>
+
+    <macrodef name = "git">
+        <attribute name = "command" />
+        <attribute name = "dir" default = "" />
+        <element name = "args" optional = "true" />
+        <sequential>
+            <echo message = "git @{command}" />
+            <exec executable = "git" dir = "@{dir}">
+                <arg value = "@{command}" />
+                <args/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name = "git-add-commit">
+        <attribute name = "rep" />
+        <attribute name = "message" />
+        <sequential>
+            <git command="add" dir="@{rep}">
+                <args>
+                    <arg value="*"/>
+                </args>
+            </git>
+            <git command="commit" dir="@{rep}">
+                <args>
+                    <arg value="-m"/>
+                    <arg value="@{message}"/>
+                </args>
+            </git>
+        </sequential>
+    </macrodef>
+
+    <target name="clear">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="make_dirs" depends="clear">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
     </target>
 
     <target name="compile" description="compile java" depends="make_dirs">
-        <javac destdir="../build/classes">
-            <src path="../src"/>
+        <javac destdir="${classes.dir}" target="7" source="7">
+            <src path="${src.dir}"/>
         </javac>
+    </target>
+
+    <target name="build" depends="compile">
+        <jar destfile="${jar.dir}/${app.name}-${app.ver}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Implementation-Version" value="${app.ver}"/>
+                <attribute name="Main-Class" value="${app.mainClass}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="test" depends="build">
+        <mkdir dir="${test.reports}"/>
+        <junit printsummary="yes" fork="yes" haltonfailure="yes">
+            <classpath refid="classpath.test"/>
+            <formatter type="xml" />
+            <batchtest todir="${test.reports}">
+                <fileset dir="${classes.dir}">
+                    <include name="**/*Test.class" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="scp" depends="build">
+        <scp todir="${server.user}@${server.address}:${server.dir}"
+             password="${server.pass}" port="${server.port}" trust="true">
+            <fileset dir="${jar.dir}"/>
+        </scp>
+    </target>
+
+    <target name="report" depends="test">
+        <copy todir="${rep.dir}">
+            <fileset dir="${test.reports}"/>
+        </copy>
+        <git-add-commit rep="${rep.dir}" message="Update reports"/>
     </target>
 </project>

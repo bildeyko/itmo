@@ -1,0 +1,20 @@
+<project name="MarksInFigure">
+    <macrodef name = "copy">
+        <attribute name = "source"/>
+        <attribute name = "dest"/>
+        <sequential>
+            <echo message = "copy /Y @{source} @{dest}"/>
+            <exec executable="cmd">
+                <arg value="/c"/>
+                <arg value="copy"/>
+                <arg value="/Y"/>
+                <arg value = "@{source}"/>
+                <arg value = "@{dest}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <target name="co" depends="test">
+        <copy source="${test.reports}\*" dest="${rep.dir}"/>
+    </target>
+</project>

@@ -63,16 +63,17 @@ _sort_gen_asm PROC
 
 	array_ptr equ [ebp+8]
 	comp equ [ebp+12]
-	i_var equ [ebp-16] ;4
-	j_var equ [ebp-20] ;8
-	k_var equ [ebp-24] ;12
-	temp_var equ [ebp-28] ;16
-	array_head equ [ebp-32] ;20
+	i_var equ [ebp-4]
+	j_var equ [ebp-8]
+	k_var equ [ebp-12]
+	temp_var equ [ebp-16]
+	array_head equ [ebp-20]
+
 	byte_size = 4
 
 	push ebp
 	mov ebp, esp
-	sub esp, 32 ;20
+	sub esp, 20
 	push esi
 	push edi
 	push ebx
@@ -86,17 +87,7 @@ _sort_gen_asm PROC
 	mov ecx, [esi+4]
 	mov ebx, [esi]
 	mov array_head, ebx
-	;mov edx, [ebx+4]
-	;mov eax, comp
-	;push 4
-	;push 5
-	;call eax
-	;add esp, 8
-	;xor ebx,ebx
-	;pop ebx
 
-
-	;sub ecx, 2
 	k_loop:
 		shr ecx, 1		
 		mov k_var, ecx
@@ -162,16 +153,13 @@ _sort_gen_asm PROC
 			jl i_loop
 			
 		mov ecx, k_var	
-		;shr ecx, 1
 		cmp ecx, 0
 		ja k_loop
 
-	;pop ebx
 	pop ebx
 	pop edi
 	pop esi
-	mov esp, ebp
-	
+	mov esp, ebp	
 	pop ebp
 	ret
 _sort_gen_asm ENDP

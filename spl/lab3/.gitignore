@@ -8,4 +8,7 @@ lab3/lab3.vcxproj.filters
 lab3/lab3.vcxproj.user
 lab3/sort_asm.obj
 Debug/
+Release/
+lab3/Debug/
+lab3/Release/
 Performance1.psess

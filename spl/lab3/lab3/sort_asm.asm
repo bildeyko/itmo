@@ -24,7 +24,7 @@ _print_array PROC
 	mov esi, array_ptr
 	mov ecx, array_size
 	mov eax, 4
-	mov ebx, 0
+	mov ebx, 0				; the counter for a loop
 
 	print_loop:
 		mul ebx				; create a real offset in the array (0,4,...)

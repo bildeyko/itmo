@@ -6,15 +6,11 @@ include libc.inc
 public _print_array
 public _sort_gen_asm
 
-data segment "data"
-
+.DATA
 printf_template db "%d ",0
 newline db 10,13,0
 
-data ends
-
-text segment "code"
-
+.CODE
 _print_array PROC
 	array_size equ [ebp+12]
 	array_ptr equ [ebp+8]
@@ -25,28 +21,23 @@ _print_array PROC
 	push edi
 	push ebx
 
-	xor esi, esi
-	xor ecx, ecx
 	mov esi, array_ptr ; поместили адрес на голову массива
-	add ecx, array_size
+	mov ecx, array_size
 	mov eax, 4
 	mov ebx, 0
 
 	print_loop:
-		mul ebx
-
+		mul ebx				; create a real offset in the array (0,4,...)
 		push ecx
 		push [esi+eax]
 		push offset printf_template
 		call _printf
 		add esp, 8
 		pop ecx
-
 		inc ebx
 		mov eax, 4
 	loop print_loop
 
-	push [esi+eax]
 	push offset newline
 	call _printf
 	add esp, 8
@@ -60,7 +51,6 @@ _print_array PROC
 _print_array ENDP
 
 _sort_gen_asm PROC
-
 	array_ptr equ [ebp+8]
 	comp equ [ebp+12]
 	i_var equ [ebp-4]
@@ -68,25 +58,20 @@ _sort_gen_asm PROC
 	k_var equ [ebp-12]
 	temp_var equ [ebp-16]
 	array_head equ [ebp-20]
-
-	byte_size = 4
+	array_size equ [ebp-24]
 
 	push ebp
 	mov ebp, esp
-	sub esp, 20
+	sub esp, 24
 	push esi
 	push edi
 	push ebx
 
-	xor edx, edx
-	xor eax, eax
-	xor esi, esi
 	mov esi, array_ptr
-
-	xor ecx,ecx
 	mov ecx, [esi+4]
+	mov array_size, ecx
 	mov ebx, [esi]
-	mov array_head, ebx
+	mov array_head, ebx	
 
 	k_loop:
 		shr ecx, 1		
@@ -94,42 +79,33 @@ _sort_gen_asm PROC
 		i_loop:
 			mov i_var, ecx			
 			mov ebx, array_head
-			shl ecx, 2
+			shl ecx, 2			; multiplication by 4 (as the size of integer) to create a real offset in the array
 			mov eax, [ebx+ecx]
 			shr ecx, 2
-			mov temp_var, eax
-			
+			mov temp_var, eax			
 			j_loop:
-				mov j_var, ecx
-				
+				mov j_var, ecx				
 				mov edx, j_var
-				sub edx, k_var
-				shl edx, 2 ; умножение на 4, т.е. на размер int
+				sub edx, k_var	; a number of the [j-k] element
+				shl edx, 2		
 				mov ebx, array_head
-				add ebx, edx ;в ebx сейчас адрес элемента [j-k]
+				add ebx, edx	; creation of the address of the [j-k] element of the array
 				mov eax, [ebx]
-				push ecx ;сохраниение перед выхозом функции
-				push eax
-
+				push ecx		; saving of the counter before the function call from the eax
+				push eax		; sending a second parameter
 				mov eax, temp_var
-				push eax
-
+				push eax		; sending a first parameter
 				mov eax, comp
 				call eax
 				add esp, 8
 				pop ecx
 
-				cmp eax, -1
+				cmp eax, -1		; check the return value
 				jne break
 					mov edx, j_var
 					shl edx, 2
 					mov edi, array_head
 					add edi, edx
-
-					push ebx
-					mov ebx, [edi]
-					pop ebx
-
 					mov eax, [ebx]
 					mov [edi], eax
 
@@ -137,19 +113,19 @@ _sort_gen_asm PROC
 				mov j_var, ecx
 				cmp ecx, k_var
 				jae j_loop
-				break:
+			break:
 				
+			; put the temp variable in the [j] element of the array:
 			mov edx, j_var
 			shl edx, 2
 			mov edi, array_head
 			add edi, edx
-
 			mov eax, temp_var
 			mov [edi], eax
-					
+								
 			mov ecx, i_var	
 			inc ecx
-			cmp ecx, [esi+4]
+			cmp ecx, array_size
 			jl i_loop
 			
 		mov ecx, k_var	
@@ -164,6 +140,4 @@ _sort_gen_asm PROC
 	ret
 _sort_gen_asm ENDP
 
-text ends
-
-end
+END

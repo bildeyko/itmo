@@ -8,7 +8,7 @@ typedef struct {
 	size_t size;
 } array_t;
 
-void array_create(array_t * arr);
+array_t * array_create(size_t size);
 array_t * array_get(FILE * file);
 void array_destroy(array_t * arr);
 

@@ -1,34 +1,30 @@
 #include "array.h"
 
-// ?? Эта функйия такая должна быть? 
-void array_create(array_t * arr, size_t size)
+array_t * array_create(size_t size)
 {
-	arr->size = size;
-	arr->arrayPtr = (int *)malloc(sizeof(int)*size);
-	if (arr->arrayPtr == NULL) {
-		showError("Malloc for arr.arrayPtr failed.");
-	}	
-}
-
-array_t * array_get(FILE * file)
-{
-	size_t size;
-	int num;
-	array_t * arr;
-	int i;
-	int * buf;
-
-	fscanf(file, "%d", &size);
+	array_t *arr;
 	arr = (array_t *)malloc(sizeof(array_t));
 	if (arr == NULL) {
 		showError("Malloc for arr failed.");
 		return NULL;
 	}
-	arr->arrayPtr = NULL;
-	arr->size = NULL;
+	arr->arrayPtr = (int *)malloc(sizeof(int)*size);
+	arr->size = size;
+	if (arr->arrayPtr == NULL) {
+		showError("Malloc for arr.arrayPtr failed.");
+		return NULL;
+	}
+}
 
-	array_create(arr, size);
-	if (arr->arrayPtr == NULL)
+array_t * array_get(FILE * file)
+{
+	size_t size;
+	int num, i, *buf;
+	array_t * arr, temp;
+
+	fscanf(file, "%d", &size);
+	arr = array_create(size);
+	if (arr == NULL)
 		return NULL;
 
 	for (i = 0; i < arr->size; i++) 

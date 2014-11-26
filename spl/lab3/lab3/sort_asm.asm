@@ -17,9 +17,7 @@ _print_array PROC
 
 	push ebp
 	mov ebp, esp
-	push esi
-	push edi
-	push ebx
+	pusha
 
 	mov esi, array_ptr
 	mov ecx, array_size
@@ -28,23 +26,23 @@ _print_array PROC
 
 	print_loop:
 		mul ebx				; create a real offset in the array (0,4,...)
-		push ecx
+		;push ecx
+		pusha
 		push [esi+eax]
 		push offset printf_template
 		call _printf
 		add esp, 8
-		pop ecx
+		;pop ecx
+		popa
 		inc ebx
 		mov eax, 4
 	loop print_loop
 
 	push offset newline
 	call _printf
-	add esp, 8
+	add esp, 4
 
-	pop ebx
-	pop edi
-	pop esi
+	popa
 	mov esp, ebp
 	pop ebp
 	ret
@@ -63,9 +61,7 @@ _sort_gen_asm PROC
 	push ebp
 	mov ebp, esp
 	sub esp, 24
-	push esi
-	push edi
-	push ebx
+	pusha
 
 	mov esi, array_ptr
 	mov ecx, [esi+4]
@@ -132,9 +128,7 @@ _sort_gen_asm PROC
 		cmp ecx, 0
 		ja k_loop
 
-	pop ebx
-	pop edi
-	pop esi
+	popa
 	mov esp, ebp	
 	pop ebp
 	ret

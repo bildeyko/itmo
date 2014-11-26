@@ -21,7 +21,7 @@ _print_array PROC
 	push edi
 	push ebx
 
-	mov esi, array_ptr ; поместили адрес на голову массива
+	mov esi, array_ptr
 	mov ecx, array_size
 	mov eax, 4
 	mov ebx, 0

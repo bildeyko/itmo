@@ -21,6 +21,9 @@ _print_array PROC
 
 	push ebp
 	mov ebp, esp
+	push esi
+	push edi
+	push ebx
 
 	xor esi, esi
 	xor ecx, ecx
@@ -48,24 +51,31 @@ _print_array PROC
 	call _printf
 	add esp, 8
 
+	pop ebx
+	pop edi
+	pop esi
 	mov esp, ebp
 	pop ebp
 	ret
 _print_array ENDP
 
 _sort_gen_asm PROC
+
 	array_ptr equ [ebp+8]
 	comp equ [ebp+12]
-	i_var equ [ebp-4]
-	j_var equ [ebp-8]
-	k_var equ [ebp-12]
-	temp_var equ [ebp-16]
-	array_head equ [ebp-20]
+	i_var equ [ebp-16] ;4
+	j_var equ [ebp-20] ;8
+	k_var equ [ebp-24] ;12
+	temp_var equ [ebp-28] ;16
+	array_head equ [ebp-32] ;20
 	byte_size = 4
 
 	push ebp
 	mov ebp, esp
-	sub esp, 20
+	sub esp, 32 ;20
+	push esi
+	push edi
+	push ebx
 
 	xor edx, edx
 	xor eax, eax
@@ -86,13 +96,16 @@ _sort_gen_asm PROC
 	;pop ebx
 
 
-	shr ecx, 1
+	;sub ecx, 2
 	k_loop:
+		shr ecx, 1		
 		mov k_var, ecx
 		i_loop:
-			mov i_var, ecx
+			mov i_var, ecx			
 			mov ebx, array_head
+			shl ecx, 2
 			mov eax, [ebx+ecx]
+			shr ecx, 2
 			mov temp_var, eax
 			
 			j_loop:
@@ -104,6 +117,7 @@ _sort_gen_asm PROC
 				mov ebx, array_head
 				add ebx, edx ;в ebx сейчас адрес элемента [j-k]
 				mov eax, [ebx]
+				push ecx ;сохраниение перед выхозом функции
 				push eax
 
 				mov eax, temp_var
@@ -112,6 +126,7 @@ _sort_gen_asm PROC
 				mov eax, comp
 				call eax
 				add esp, 8
+				pop ecx
 
 				cmp eax, -1
 				jne break
@@ -120,10 +135,15 @@ _sort_gen_asm PROC
 					mov edi, array_head
 					add edi, edx
 
+					push ebx
+					mov ebx, [edi]
+					pop ebx
+
 					mov eax, [ebx]
 					mov [edi], eax
 
 				sub ecx, k_var
+				mov j_var, ecx
 				cmp ecx, k_var
 				jae j_loop
 				break:
@@ -142,11 +162,16 @@ _sort_gen_asm PROC
 			jl i_loop
 			
 		mov ecx, k_var	
-		shr ecx, 1
+		;shr ecx, 1
 		cmp ecx, 0
 		ja k_loop
 
+	;pop ebx
+	pop ebx
+	pop edi
+	pop esi
 	mov esp, ebp
+	
 	pop ebp
 	ret
 _sort_gen_asm ENDP

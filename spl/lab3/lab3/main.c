@@ -5,6 +5,10 @@
 #include "tools.h"
 
 typedef void(*array_sort_ptr)(array_t * arr, comparer_t comp);
+extern void sort_gen_asm(array_t * arr, comparer_t comp);
+extern void print_array(array_t * arr, size_t size);
+
+#define REPS_d 100001
 
 time_t measurementTime(array_sort_ptr arraySort, array_t * arr, unsigned int iterations)
 {
@@ -12,7 +16,6 @@ time_t measurementTime(array_sort_ptr arraySort, array_t * arr, unsigned int ite
 	int i, j;
 	array_t * arrTemp;
 	allTime = 0;
-	printf("%d\n", sizeof(comparer_t));
 	for (i = 0; i < iterations; i++)
 	{
 		arrTemp = (array_t *)malloc(sizeof(array_t));
@@ -27,16 +30,17 @@ time_t measurementTime(array_sort_ptr arraySort, array_t * arr, unsigned int ite
 		printf("\n");*/
 
 		time = clock();
-		//arraySort(arrTemp, &comparer);
-		sort_gen_asm(arrTemp, &comparer);
+		arraySort(arrTemp, &comparer);
 		time = clock() - time;
 		allTime += time;
 
+		//print_array(arrTemp->arrayPtr, arrTemp->size);
+		//printf("-----\n");
 		/*printf("%d_after - ", i);
 		print_array(arrTemp->arrayPtr, arrTemp->size);
 		printf("\n");*/
 
-		//array_destroy(arrTemp);
+		array_destroy(arrTemp);
 	}
 
 	return allTime;
@@ -50,7 +54,7 @@ int main(int argc, char** argv)
 	int i;
 	time_t resultTime;
 
-	curFile = fopen("input.txt", "r");
+	curFile = fopen("input2.txt", "r");
 	if (curFile == NULL)
 	{
 		showError("Error with file reading");
@@ -59,9 +63,17 @@ int main(int argc, char** argv)
 
 	arr = array_get(curFile);
 	arrayFunc = &sort_get;
-	resultTime = measurementTime(arrayFunc, arr, 100);
-	printf("%d\n", resultTime);
+	printf("Shell sort\n\n", arr->size);
+	printf("   Array size: %d\n", arr->size);
+	printf("   Reps: %d\n", REPS_d);
+	printf("   Array:\n", REPS_d);
 	print_array(arr->arrayPtr, arr->size);
+	printf("\n   Results:\n", REPS_d);
+	resultTime = measurementTime(arrayFunc, arr, REPS_d);
+	printf("   C: %d tics\n", resultTime);
+	arrayFunc = &sort_gen_asm;
+	resultTime = measurementTime(arrayFunc, arr, REPS_d);
+	printf("   Asm: %d tics\n", resultTime);
 	array_destroy(arr);
 	system("pause");
 	return 0;

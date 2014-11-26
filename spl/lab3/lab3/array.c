@@ -14,6 +14,7 @@ array_t * array_create(size_t size)
 		showError("Malloc for arr.arrayPtr failed.");
 		return NULL;
 	}
+	return arr;
 }
 
 array_t * array_get(FILE * file)
@@ -21,18 +22,15 @@ array_t * array_get(FILE * file)
 	size_t size;
 	int num, i, *buf;
 	array_t * arr, temp;
-
 	fscanf(file, "%d", &size);
 	arr = array_create(size);
 	if (arr == NULL)
 		return NULL;
-
 	for (i = 0; i < arr->size; i++) 
 	{
 		fscanf(file, "%d", &num);
 		arr->arrayPtr[i] = num;
 	}
-
 	return arr;
 }
 

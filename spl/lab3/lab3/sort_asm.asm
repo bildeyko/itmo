@@ -26,13 +26,11 @@ _print_array PROC
 
 	print_loop:
 		mul ebx				; create a real offset in the array (0,4,...)
-		;push ecx
 		pusha
 		push [esi+eax]
 		push offset printf_template
 		call _printf
 		add esp, 8
-		;pop ecx
 		popa
 		inc ebx
 		mov eax, 4

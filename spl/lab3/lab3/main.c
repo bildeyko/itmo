@@ -28,6 +28,8 @@ time_t measurementTime(array_sort_ptr arraySort, array_t * arr, unsigned int ite
 		arraySort(arrTemp, &comparer);
 		time = clock() - time;
 		allTime += time;
+		if (i == iterations - 1)
+			print_array(arrTemp->arrayPtr, arrTemp->size);
 		array_destroy(arrTemp);
 	}
 	return allTime;
@@ -40,7 +42,7 @@ int main(int argc, char** argv)
 	array_sort_ptr arrayFunc;
 	int i;
 	time_t resultTime;
-	curFile = fopen("input2.txt", "r");
+	curFile = fopen("input.txt", "r");
 	if (curFile == NULL)
 	{
 		showError("Error with file reading");
@@ -49,6 +51,11 @@ int main(int argc, char** argv)
 	arr = array_get(curFile);
 	if (arr == NULL)
 		exit(1);
+	if (arr->size <= 0)
+	{
+		showError("Bad length of the array");
+		exit(1);
+	}
 	arrayFunc = &sort_get;
 	printf("Shell sort\n\n", arr->size);
 	printf("   Array size: %d\n", arr->size);
@@ -56,11 +63,13 @@ int main(int argc, char** argv)
 	printf("   Array:\n", REPS_d);
 	print_array(arr->arrayPtr, arr->size);
 	printf("\n   Results:\n", REPS_d);
+	printf("   By C:\n");
 	resultTime = measurementTime(arrayFunc, arr, REPS_d);
-	printf("   C: %d tics\n", resultTime);
+	printf("   Time: %d tics\n\n", resultTime);
 	arrayFunc = &sort_gen_asm;
+	printf("   By Asm:\n");
 	resultTime = measurementTime(arrayFunc, arr, REPS_d);
-	printf("   Asm: %d tics\n", resultTime);
+	printf("   Time: %d tics\n", resultTime);
 	array_destroy(arr);
 	system("pause");
 	return 0;

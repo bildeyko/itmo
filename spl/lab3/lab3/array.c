@@ -41,8 +41,7 @@ array_t * array_get(FILE * file)
 			showError("Errors in a structure of the file.");
 			return NULL;
 		}
-		fscanf(file, "%d", &num);
-		
+		fscanf(file, "%d", &num);		
 		arr->arrayPtr[i] = num;
 	}
 	return arr;

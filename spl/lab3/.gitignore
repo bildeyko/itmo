@@ -2,11 +2,12 @@ lab3.opensdf
 lab3.sdf
 lab3.sln
 lab3.v12.suo
-Performance1.psess
-
 lab3/lab3.vcxproj
 lab3/lab3.vcxproj.filters
 lab3/lab3.vcxproj.user
 lab3/sort_asm.obj
-lab3/Debug
 Debug/
+Release/
+lab3/Debug/
+lab3/Release/
+Performance1.psess

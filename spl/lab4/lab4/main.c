@@ -7,12 +7,15 @@ int main(int argc, char** argv)
 {
 	char regexp[30];
 	int size = 5;
-	digraph_t *graph;
+	int result = -1;
+	digraph_t *graph = NULL;
 
 	int i, j;
 
 	strcpy(regexp, "(abc)");
-	graph = digraph_init(5);
+	result = digraph_init(&graph, size);
+	if (result)
+		showError("Malloc for matrix failed.");
 
 	for (i = 0; i < size; i++)
 	{

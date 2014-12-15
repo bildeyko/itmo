@@ -4,4 +4,5 @@
 void showError(char text[])
 {
 	fprintf(stderr, "Error: %s\n", text);
+	exit(1);
 }

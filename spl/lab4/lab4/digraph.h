@@ -8,5 +8,5 @@ typedef struct {
 	size_t vertices;
 } digraph_t;
 
-digraph_t * digraph_init(size_t size);
+int digraph_init(digraph_t ** g, size_t size);
 #endif

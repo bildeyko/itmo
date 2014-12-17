@@ -1,131 +1,145 @@
 package com.bildeyko.views;
 
 import com.bildeyko.Figure;
-import com.bildeyko.views.tools.PlaneCanvas;
-import com.bildeyko.views.tools.Plane;
+import com.bildeyko.Mark;
+import com.bildeyko.views.tools.Plane2;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by ASUS on 18.11.2014.
  */
 public class MainView {
-    final Plane plane;
+    final Plane2 plane;
     Figure newFigure;
     public MainView() {
         JFrame frm = new JFrame("Область");
-        frm.setLayout(new BoxLayout(frm.getContentPane(), BoxLayout.Y_AXIS));
+        frm.setLayout(new GridLayout(0,2));
 
-        frm.setSize(500,500);
         frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frm.setResizable(false);
 
         JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new GridLayout(0,2));
-        controlPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+        controlPanel.setBorder(BorderFactory.createLineBorder(Color.lightGray, 1));
         frm.add(controlPanel);
 
         JPanel listXCont = new JPanel();
-        listXCont.setLayout(new FlowLayout());
-        listXCont.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-        //listXCont.setMaximumSize(new Dimension(200, 100));
-        String[] itemsXCoor = {"2", "5", "10"};
-        JList listX = new JList(itemsXCoor);
+        listXCont.setAlignmentX(Component.LEFT_ALIGNMENT);
+        listXCont.setLayout(new BoxLayout(listXCont, BoxLayout.X_AXIS));
+        JLabel labelX = new JLabel("X");
+        listXCont.add(labelX);
+        listXCont.add(Box.createRigidArea(new Dimension(30,0)));
+        String[] itemsXCoor = {"10","-20","40"};
+        final JList listX = new JList(itemsXCoor);
         listX.setVisibleRowCount(-1);
+        listX.setSelectedIndex(0);
         listXCont.add(listX);
-        controlPanel.add(new JLabel("X"));
         controlPanel.add(listXCont);
-       // frm.add(controlPanel);
         frm.add(controlPanel, BorderLayout.NORTH);
 
         JPanel yButPanel = new JPanel();
-        yButPanel.setLayout(new BoxLayout(yButPanel, BoxLayout.Y_AXIS));
-        ButtonGroup yGroup = new ButtonGroup();
-        JRadioButton yCoor1 = new JRadioButton("1", true);
-        JRadioButton yCoor3 = new JRadioButton("3");
-        JRadioButton yCoor15 = new JRadioButton("15");
-        yGroup.add(yCoor1);
-        yGroup.add(yCoor3);
+        yButPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        yButPanel.setLayout(new BoxLayout(yButPanel, BoxLayout.X_AXIS));
+        yButPanel.add(new JLabel("Y"));
+        yButPanel.add(Box.createRigidArea(new Dimension(30,0)));
+        final ButtonGroup yGroup = new ButtonGroup();
+        JRadioButton yCoor15 = new JRadioButton("15", true);
+        yCoor15.setActionCommand("15");
+        JRadioButton yCoor_2 = new JRadioButton("-2");
+        yCoor_2.setActionCommand("-2");
+        JRadioButton yCoor_40 = new JRadioButton("40");
+        yCoor_40.setActionCommand("40");
         yGroup.add(yCoor15);
-        yButPanel.add(yCoor1);
-        yButPanel.add(yCoor3);
+        yGroup.add(yCoor_2);
+        yGroup.add(yCoor_40);
         yButPanel.add(yCoor15);
-        controlPanel.add(new JLabel("Y"));
+        yButPanel.add(yCoor_2);
+        yButPanel.add(yCoor_40);
         controlPanel.add(yButPanel);
 
+        JPanel addMarkButPanel = new JPanel();
+        addMarkButPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        addMarkButPanel.setLayout(new BoxLayout(addMarkButPanel, BoxLayout.X_AXIS));
+        addMarkButPanel.add(new JLabel("Добавить/убрать"));
+        addMarkButPanel.add(Box.createRigidArea(new Dimension(30,0)));
+        JButton addMarkBut = new JButton("Ok");
+        addMarkButPanel.add(addMarkBut);
+        controlPanel.add(addMarkButPanel);
+
+        JPanel rPanelout = new JPanel();
+        rPanelout.setAlignmentX(Component.LEFT_ALIGNMENT);
+        rPanelout.setLayout(new FlowLayout());
         JPanel rPanel = new JPanel();
-        rPanel.setLayout(new FlowLayout());
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(5,1,20,1));
-        rPanel.add(spinner);
-        controlPanel.add(new JLabel("R"));
-        controlPanel.add(rPanel);
+        rPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        rPanel.setLayout(new BoxLayout(rPanel, BoxLayout.X_AXIS));
+        rPanel.add(new JLabel("R"));
+        rPanel.add(Box.createRigidArea(new Dimension(30,0)));
+        JPanel rPanelsp = new JPanel();
+        rPanelsp.setLayout(new FlowLayout());
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(50,35,70,5));
+        rPanelsp.add(spinner);
+        rPanel.add(rPanelsp);
+        rPanelout.add(rPanel);
+        controlPanel.add(rPanelout);
         ChangeListener listener = new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 JSpinner spinnerTemp = (JSpinner)e.getSource();
                 SpinnerModel spinnerModel = spinnerTemp.getModel();
-                System.out.println("Source: " + spinnerModel.getValue());
-                plane.setRadius((Integer)spinnerModel.getValue());
                 newFigure = new Figure((Integer)spinnerModel.getValue());
+                plane.updateFigure(newFigure);
+                plane.setRadius((Integer)spinnerModel.getValue());
             }
         };
-
         spinner.addChangeListener(listener);
 
-       plane = new Plane(200,200);
-        plane.setPoint(10,10);
-        /*JPanel planePanel = new JPanel();
-        planePanel.setLayout(new FlowLayout());
-        PlaneCanvas test = new PlaneCanvas();
-        planePanel.add(test);
-        test.setSize(200,200);*/
-        frm.add(plane);
+        JPanel lastPointPanel = new JPanel();
+        lastPointPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lastPointPanel.setLayout(new BoxLayout(lastPointPanel, BoxLayout.X_AXIS));
+        lastPointPanel.add(new JLabel("Последняя точка:"));
+        lastPointPanel.add(Box.createRigidArea(new Dimension(30,0)));
+        final JLabel lastPoint = new JLabel("-");
+        lastPointPanel.add(lastPoint);
+        controlPanel.add(lastPointPanel);
 
-        /*JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new GridLayout(10,1));
-        controlPanel.setVisible(true);
-        controlPanel.setSize(100,100);
-        controlPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
-        frm.add(controlPanel);
-
-        JPanel xPanel = new JPanel();
-        xPanel.setLayout(new BoxLayout(xPanel, BoxLayout.X_AXIS));
-        xPanel.setMaximumSize(new Dimension(200, 100));
-        xPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
-        String[] itemsXCoor = {"2", "5", "10"};
-        JComboBox xBox = new JComboBox(itemsXCoor);
-        xPanel.add(new JLabel("X"));
-        xPanel.add(Box.createRigidArea(new Dimension(5,0)));
-        xPanel.add(xBox);
-
-        JPanel yPanel = new JPanel();
-        yPanel.setLayout(new BoxLayout(yPanel, BoxLayout.X_AXIS));
-        JPanel yButPanel = new JPanel();
-        yButPanel.setLayout(new BoxLayout(yButPanel, BoxLayout.Y_AXIS));
-        JRadioButton yCoor1 = new JRadioButton("1", true);
-        JRadioButton yCoor3 = new JRadioButton("3");
-        JRadioButton yCoor15 = new JRadioButton("15");
-        ButtonGroup yGroup = new ButtonGroup();
-        yGroup.add(yCoor1);
-        yGroup.add(yCoor3);
-        yGroup.add(yCoor15);
-
-        yButPanel.add(yCoor1);
-        yButPanel.add(yCoor3);
-        yButPanel.add(yCoor15);
-        yPanel.add(new JLabel("Y"));
-        yPanel.add(Box.createRigidArea(new Dimension(5,0)));
-        yPanel.add(yButPanel);
-
-        controlPanel.add(xPanel);
-        controlPanel.add(yPanel);*/
-
-        //JLabel lab = new JLabel("Hello!");
-        //frm.add(lab);
-
-       // frm.setContentPane(inputPanel);
+        JPanel planeCont = new JPanel();
+        planeCont.setLayout(new BoxLayout(planeCont,BoxLayout.Y_AXIS));
+        plane = new Plane2();
+        plane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Dimension size = plane.getSize();
+                Float x = (e.getX() - size.width/2)/(plane.scaleX);
+                Float y = (size.height/2 - e.getY())/(plane.scaleY);
+                plane.addMark(new Mark(x, y));
+                lastPoint.setText("x: "+String.format("%.2f", x)+", y: "+String.format("%.2f", y));
+            }
+        });
+        addMarkBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Float x = Float.parseFloat(listX.getSelectedValue().toString());
+                Float y = Float.parseFloat(yGroup.getSelection().getActionCommand());
+                plane.addMark(new Mark(x, y));
+                lastPoint.setText("x: " + String.format("%.2f", x) + ", y: " + String.format("%.2f", y));
+            }
+        });
+        planeCont.add(plane);
+        frm.add(planeCont);
         frm.pack();
         frm.setVisible(true);
+
+        plane.setRadius((Integer)spinner.getValue());
+        newFigure = new Figure((Integer)spinner.getValue());
+        plane.updateFigure(newFigure);
+
+
     }
 }

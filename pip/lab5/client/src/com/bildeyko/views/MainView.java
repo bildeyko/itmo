@@ -2,6 +2,7 @@ package com.bildeyko.views;
 
 import com.bildeyko.Figure;
 import com.bildeyko.Mark;
+import com.bildeyko.ServerConnection;
 import com.bildeyko.views.tools.Plane2;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ import java.awt.event.MouseEvent;
 public class MainView {
     final Plane2 plane;
     Figure newFigure;
+    ServerConnection server;
     public MainView() {
         JFrame frm = new JFrame("Область");
         frm.setLayout(new GridLayout(0,2));
@@ -140,6 +142,8 @@ public class MainView {
         newFigure = new Figure((Integer)spinner.getValue());
         plane.updateFigure(newFigure);
 
-
+        server = new ServerConnection("localhost",5555);
+        server.connect();
+        server.send(5.05);
     }
 }

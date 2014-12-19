@@ -5,11 +5,8 @@ import com.bildeyko.Mark;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Created by ASUS on 04.12.2014.

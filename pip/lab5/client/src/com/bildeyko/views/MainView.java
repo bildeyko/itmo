@@ -142,8 +142,10 @@ public class MainView {
         newFigure = new Figure((Integer)spinner.getValue());
         plane.updateFigure(newFigure);
 
-        server = new ServerConnection("localhost",5555);
+        server = new ServerConnection("localhost",5557);
         server.connect();
         server.send(5.05);
+        server.send(10.05);
+        server.send(50);
     }
 }

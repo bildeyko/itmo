@@ -23,7 +23,7 @@ public class Lab5_Server {
 
         while (true) {
             try {
-                servers = new ServerSocket(5555);
+                servers = new ServerSocket(5557);
             } catch (IOException e) {
                 System.out.println("Couldn't listen to port 5555");
                 System.exit(-1);
@@ -55,9 +55,23 @@ public class Lab5_Server {
 
             System.out.println("Wait for messages");
             try {
+                Mark mark = new Mark(0.0f,0.0f);
+                double r;
+                int count = 0;
                 while ((input = in.readLine()) != null) {
                     if (input.equalsIgnoreCase("exit")) break;
-                    out.println("S ::: " + input);
+                    //out.println("S ::: " + input);
+                    count ++;
+                    if(count == 1)
+                        mark.x = (float)Double.parseDouble(input);
+                    if(count == 2)
+                        mark.y = (float)Double.parseDouble(input);
+                    if(count == 3) {
+                        r = Double.parseDouble(input);
+                        CheckMark t = new CheckMark(mark,r);
+                        t.run();
+                        out.println(t.status);
+                    }
                     System.out.println(Double.parseDouble(input));
                 }
             } catch (IOException e) {

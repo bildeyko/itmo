@@ -15,12 +15,16 @@ import com.bildeyko.views.MainView;
 public class Lab3 {
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
+        /*SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 new MainView();
             }
-        });
+        });*/
+
+        int a = 2;
+        int y = (a == 2) ? (a-- - 1) : (--a + 1);
+        System.out.println(args[y]);
 
         /*Socket fromserver = null;
         PrintWriter out = null;

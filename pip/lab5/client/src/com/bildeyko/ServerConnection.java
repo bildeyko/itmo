@@ -13,6 +13,7 @@ public class ServerConnection {
     Socket fromserver = null;
     PrintWriter out = null;
     BufferedReader in = null;
+    BufferedReader inu = null;
     String host;
     Integer port;
 
@@ -42,12 +43,25 @@ public class ServerConnection {
             System.out.println("Can't get output stream");
             System.exit(-1);
         }
-        BufferedReader inu = new
+        inu = new
                 BufferedReader(new InputStreamReader(System.in));
     }
 
+    private static int gg = 0;
     public void send(double num)
     {
         out.println(num);
+        gg++;
+        String fserver;
+        try {
+            if(gg == 3)
+                while ((fserver = inu.readLine())!=null) {
+                    fserver = in.readLine();
+                    System.out.println(fserver);
+                }
+        } catch (IOException e) {
+            System.out.println("Все очень плохо");
+            System.exit(-1);
+        }
     }
 }

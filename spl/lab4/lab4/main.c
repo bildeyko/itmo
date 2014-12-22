@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "digraph.h"
 #include "set.h"
+
+#define BUFFER_SIZE 100
 
 int create_nfa(digraph_t * g, char * regexp)
 {
@@ -36,7 +39,15 @@ int create_nfa(digraph_t * g, char * regexp)
 			digraph_add_edge(g, lp, i + 1);
 			digraph_add_edge(g, i + 1, lp);
 		}
-		if (regexp[i] == '(' || regexp[i] == '*' || regexp[i] == ')') // тут, когда последняя скобка ) по идее будет ошибка выхода за пределы массива, так что надо делать размер +1
+		if (i < g->vertices - 1 && regexp[i + 1] == '+')
+		{
+			digraph_add_edge(g, i + 1, lp);
+		}
+		if (i < g->vertices - 1 && regexp[i + 1] == '?')
+		{
+			digraph_add_edge(g, lp, i + 1);
+		}
+		if (regexp[i] == '(' || regexp[i] == '*' || regexp[i] == '+' || regexp[i] == '?' || regexp[i] == ')') // тут, когда последняя скобка ) по идее будет ошибка выхода за пределы массива, так что надо делать размер +1
 			digraph_add_edge(g, i, i + 1);
 	}
 }
@@ -56,7 +67,7 @@ int recognize(char * str, char * re, digraph_t * g)
 	set_init(&setPossible);
 	set_init(&setMatch);
 
-	for (i = 0; i < g->vertices; i++)
+	/*for (i = 0; i < g->vertices; i++)
 	{
 		for (j = 0; j < g->vertices; j++)
 			printf("%d\t", g->matrix[i][j]);
@@ -66,7 +77,7 @@ int recognize(char * str, char * re, digraph_t * g)
 	for (i = 0; i < g->vertices; i++)
 	{
 		printf("%d\t", marked[i]);
-	}
+	}*/
 
 	for (i = 0; i < g->vertices; i++)
 	{
@@ -79,8 +90,9 @@ int recognize(char * str, char * re, digraph_t * g)
 		{
 			item = set_get_value(setPossible, j);
 			if (item < g->vertices)
-				if (re[item] == str[i] || re[item] == '.')
-					set_add(setMatch, item + 1);
+				if (re[item] != '(' && re[item] != ')') //// фикс для работы со строками, которые уже содержат скобки
+					if (re[item] == str[i] || re[item] == '.')
+						set_add(setMatch, item + 1);
 		}
 		set_clear(setPossible);
 
@@ -101,42 +113,101 @@ int recognize(char * str, char * re, digraph_t * g)
 		set_clear(setMatch);
 	}
 
-	for (i = 0; i < g->vertices; i++)
-	{
-		for (j = 0; j < g->vertices; j++)
-			printf("%d\t", g->matrix[i][j]);
-		printf("\n");
-	}
-	printf("Marked:\n");
-	for (i = 0; i < g->vertices; i++)
-	{
-		printf("%d\t", marked[i]);
-	}
-
 	for (i = 0; i < setPossible->items; i++)
 	{
 		item = set_get_value(setPossible, i);
-		if (item == g->vertices-1)
+		if (item == g->vertices - 1)
+		{
+			set_clear(setPossible);
+			set_clear(setMatch);
+			free(setMatch);
+			free(setPossible);
+			free(marked);
 			return 0;
+		}
 	}
-
+	set_clear(setPossible);
+	set_clear(setMatch);
+	free(setMatch);
+	free(setPossible);
+	free(marked);
 	return 1;
 }
 
 int main(int argc, char** argv)
 {
-	char regexp[30];
-	char input[30];
+	char regexp[BUFFER_SIZE];
+	char regexp_tmp[BUFFER_SIZE];
+	char input[1000];
 	//int size = 5;
 	int result = -1;
 	int *marked;
+	int ignores_opt, num_opt;
 	digraph_t *graph = NULL;
+	clock_t time;
+	clock_t allTime;
+	int count;
 	//set_t *set;
 
 	int i, j;
+	ignores_opt = 0;
+	num_opt = 0;
+	strcpy(regexp, "");
+	for (i = 1; i<argc; i++)
+	{
+		if (argv[i][0] == '-')
+		{
+			switch (argv[i][1])
+			{
+			case 'i':
+				ignores_opt = 1;
+				break;
+			case 'n':
+				num_opt = 1;
+				break;
+			default:
+				printf("Wrong argument: %s\n", argv[i]);
+				//usage();
+			}
+		}
+		else
+		{
+			strncpy(regexp_tmp, &argv[i][0], BUFFER_SIZE);
+			regexp[BUFFER_SIZE - 1] = '\0';
+		}
+	}
 
-	strcpy(regexp, "(.*ab(2c|d1).*)");
-	strcpy(input, "cabd1");
+
+	//strcpy(regexp, "(.*ab(2c|d1).*)");
+	if (regexp_tmp[0] != '^')
+	{
+		strncat(regexp, ".*", 2);
+		strncat(regexp, regexp_tmp, strlen(regexp_tmp));
+		strcpy(regexp_tmp, regexp);
+	}
+	else
+	{
+		strncat(regexp, regexp_tmp + 1, strlen(regexp_tmp));
+		strcpy(regexp_tmp, regexp);
+	}
+	if (regexp_tmp[strlen(regexp_tmp)-1] != '$')
+	{
+		strcpy(regexp, regexp_tmp);
+		//strncat(regexp, regexp_tmp, strlen(regexp_tmp));
+		strncat(regexp, ".*", 2);		
+		strcpy(regexp_tmp, regexp);
+	}
+	else
+	{
+		strcpy(regexp, regexp_tmp);
+		regexp[strlen(regexp) - 1] = '\0';
+		strcpy(regexp_tmp, regexp);
+	}
+	strcpy(regexp, "");
+	strncat(regexp, "(", 1);
+	strncat(regexp, regexp_tmp, strlen(regexp_tmp));
+	strncat(regexp, ")", 1);
+	//strcpy(input, "cabd1");
 	//strcpy(regexp, "(.*AB((C|D*E)F)*G)");
 	//strcpy(regexp, "((a*b|ac)d)");
 	result = digraph_init(&graph, strlen(regexp));
@@ -153,7 +224,29 @@ int main(int argc, char** argv)
 
 	
 	create_nfa(graph, regexp);
-	result = recognize(input, regexp, graph);
+	//freopen("datebook", "r", stdin);
+	allTime = 0;
+	count = 1;
+	while (!feof(stdin))
+	{
+		fgets(input, 1000, stdin);
+		i = strlen(input) - 1;
+		if (input[i] == '\n') input[i] = '\0';
+		time = clock();
+		result = recognize(input, regexp, graph);
+		time = clock() - time;
+		allTime += time;		
+		if (!result)
+			if (!num_opt)
+				printf("%s\n", input);
+			else
+				printf("%d. %s\n", count, input);
+		if (num_opt)
+			count++;
+		
+	}
+	fprintf(stdout, " Time: %d cticks\n", allTime);
+	
 	/*for (i = 0; i < graph->vertices; i++)
 	{
 		for (j = 0; j < graph->vertices; j++)
@@ -174,5 +267,5 @@ int main(int argc, char** argv)
 	printf("\n");*/
 
 	digraph_free(graph);
-	system("pause");
+	//system("pause");
 }

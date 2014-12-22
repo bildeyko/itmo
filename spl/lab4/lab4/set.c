@@ -84,7 +84,7 @@ void set_clear(set_t *set)
 {
 	set_item_t *current;
 	set_item_t *next;
-	if (set->head == NULL) // !!!!!!!!!!!!!!!!!!!!!!!!!! cabc - падало
+	if (set->head == NULL)
 		return;
 	current = set->head;
 	next = current->next;
@@ -98,6 +98,4 @@ void set_clear(set_t *set)
 		current = next;
 		next = next->next;
 	}
-	//free(current);
-	//set->items--;
 }

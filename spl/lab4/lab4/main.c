@@ -179,12 +179,13 @@ int main(int argc, char** argv)
 	char regexp_tmp[BUFFER_SIZE];
 	char input[1000];
 	char buffer[1000];
+	char buffer_output[8192];
 	int result = -1;
-	int ignores_opt, num_opt, set_opt, time_opt, invert_opt;
+	int ignores_opt, num_opt, set_opt, time_opt, invert_opt, matches_opt;
 	digraph_t *graph = NULL;
 	clock_t time;
 	clock_t allTime;
-	int count;
+	int count, matches_all;
 	int i, j;
 
 	ignores_opt = 0;
@@ -192,6 +193,8 @@ int main(int argc, char** argv)
 	set_opt = 0;
 	time_opt = 0;
 	invert_opt = 0;
+	matches_opt = 0;
+	matches_all = 0;
 
 	strcpy(regexp, "");
 	for (i = 1; i<argc; i++)
@@ -214,6 +217,9 @@ int main(int argc, char** argv)
 				break;
 			case 'v':
 				invert_opt = 1;
+				break;
+			case 'c':
+				matches_opt = 1;
 				break;
 			case 'h':
 				usage();
@@ -264,7 +270,7 @@ int main(int argc, char** argv)
 	create_nfa(graph, regexp);
 	allTime = 0;
 	count = 1;
-
+	//setvbuf(stdout, buffer_output, _IOFBF, sizeof(buffer_output));
 	while (!feof(stdin))
 	{
 		fgets(input, 1000, stdin);
@@ -289,41 +295,46 @@ int main(int argc, char** argv)
 		time = clock() - time;
 		allTime += time;
 
-		if (!invert_opt)
-		{
+		if (!matches_opt)
+			if (!invert_opt)
+			{
 			if (!result)
 				if (ignores_opt)
 					if (!num_opt)
-						printf("%s\n", buffer);
+						fprintf(stdout,"%s\n", buffer);
 					else
-						printf("%d. %s\n", count, buffer);
+						fprintf(stdout,"%d. %s\n", count, buffer);
 				else
 					if (!num_opt)
-						printf("%s\n", input);
+						fprintf(stdout,"%s\n", input);
 					else
-						printf("%d. %s\n", count, input);
-		}
+						fprintf(stdout,"%d. %s\n", count, input);
+			}
+			else
+			{
+				if (result)
+					if (ignores_opt)
+						if (!num_opt)
+							fprintf(stdout,"%s\n", buffer);
+						else
+							fprintf(stdout,"%d. %s\n", count, buffer);
+					else
+						if (!num_opt)
+							fprintf(stdout,"%s\n", input);
+						else
+							fprintf(stdout,"%d. %s\n", count, input);
+			}
 		else
-		{
-			if (result)
-				if (ignores_opt)
-					if (!num_opt)
-						printf("%s\n", buffer);
-					else
-						printf("%d. %s\n", count, buffer);
-				else
-					if (!num_opt)
-						printf("%s\n", input);
-					else
-						printf("%d. %s\n", count, input);
-		}
+			if (!result)
+				matches_all++;
 
 		if (num_opt)
 			count++;		
 	}
-
+	if (matches_opt)
+		fprintf(stdout, "Matches: %d \n", matches_all);
 	if (time_opt)
-		fprintf(stdout, " Time: %d cticks\n", allTime);
+		fprintf(stderr, "Time: %d cticks\n", allTime);
 
 	digraph_free(graph);
 }

@@ -17,13 +17,15 @@ void add_error(int err)
 
 void usage()
 {
-	printf("Usage: lab4.exe [OPTION] ... PATTERN\n");
+	printf("Usage: nbgrep [OPTION] ... PATTERN < [FILE]\n");
+	printf(" ^Q \t exit\n");
 	printf("Options:\n");
 	printf(" -i \t ignores upper/lower case\n");
 	printf(" -n \t print line number (first line is 1)\n");
 	printf(" -h \t display this help and exit\n");
 	printf(" -t \t print an execution time of the program\n");
 	printf(" -v \t select non-matching lines\n");
+	printf(" -c \t only print a count of matching lines\n");
 	printf(" -s \t use implementation on a set data type\n");	
 	printf("Regexp synopsis:\n");
 	printf(" () \t defines a marked subexpression\n");

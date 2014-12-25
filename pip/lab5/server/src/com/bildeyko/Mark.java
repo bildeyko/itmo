@@ -6,7 +6,6 @@ package com.bildeyko;
 public class Mark {
     public Float x;
     public Float y;
-    public boolean status;
     private Integer rad;
     public Integer currentSize;
     private Integer startSize = 10;

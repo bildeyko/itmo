@@ -1,36 +1,27 @@
 package com.bildeyko;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Iterator;
-import java.util.Vector;
-
-import javax.swing.*;
-
-import com.bildeyko.views.MainView;
 
 public class Lab5_Server {
 
     public static void main(String[] args) {
         ServerSocket servers = null;
         Socket fromclient = null;
-        BufferedReader in = null;
-        PrintWriter out = null;
+        ObjectInputStream in = null;
+        ObjectOutputStream out = null;
 
         while (true) {
             try {
-                servers = new ServerSocket(5557);
+                servers = new ServerSocket(5556);
             } catch (IOException e) {
-                System.out.println("Couldn't listen to port 5555");
+                System.out.println("Couldn't listen to port 5556");
                 System.exit(-1);
             }
 
             try {
-                System.out.print("Waiting for a client...");
+                System.out.println("Waiting for a client...");
                 fromclient = servers.accept();
                 System.out.println("Client connected");
             } catch (IOException e) {
@@ -39,44 +30,33 @@ public class Lab5_Server {
             }
 
             try {
-                in = new BufferedReader(new
-                        InputStreamReader(fromclient.getInputStream()));
+                in = new ObjectInputStream(fromclient.getInputStream());
             } catch (IOException e) {
                 System.out.println("Can't get input stream");
                 System.exit(-1);
             }
             try {
-                out = new PrintWriter(fromclient.getOutputStream(), true);
+                out = new ObjectOutputStream(fromclient.getOutputStream());
             } catch (IOException e) {
                 System.out.println("Can't get output stream");
                 System.exit(-1);
             }
-            String input, output;
-
             System.out.println("Wait for messages");
             try {
-                Mark mark = new Mark(0.0f,0.0f);
-                double r;
-                int count = 0;
-                while ((input = in.readLine()) != null) {
-                    if (input.equalsIgnoreCase("exit")) break;
-                    //out.println("S ::: " + input);
-                    count ++;
-                    if(count == 1)
-                        mark.x = (float)Double.parseDouble(input);
-                    if(count == 2)
-                        mark.y = (float)Double.parseDouble(input);
-                    if(count == 3) {
-                        r = Double.parseDouble(input);
-                        CheckMark t = new CheckMark(mark,r);
-                        t.run();
-                        out.println(t.status);
+                while (true) {
+                    MarkClient tmpMark = null;
+                    try {
+                        tmpMark = (MarkClient) in.readObject();
+                    } catch (ClassNotFoundException e) {
+                        System.out.println("Class not found");
                     }
-                    System.out.println(Double.parseDouble(input));
+
+                        CheckMark t = new CheckMark(tmpMark,out);
+                        t.run();
+                    System.out.println(tmpMark.toString());
                 }
             } catch (IOException e) {
-                System.out.println("Error with reading from stream");
-                //System.exit(-1);
+                System.out.println("Client disconnected");
             }
             try {
                 out.close();

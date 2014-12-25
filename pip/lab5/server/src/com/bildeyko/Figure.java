@@ -10,20 +10,28 @@ public class Figure {
         this.r = r;
     }
 
-    public boolean checkMark(Mark mark) {
-        if(mark.x >= 0) {
-            if(mark.y >= 0 && mark.y <= r && mark.x <= r) {
-                return true;
+    public Integer checkMark(Mark mark) {
+        int y = 0;
+        if(mark.x <= 0) {
+            if(mark.y >= 0) {
+                y = (int) Math.sqrt(Math.pow(r, 2) - Math.pow(mark.x, 2));
+                if(mark.y <= y)
+                    return 1;
             }
-            if(mark.y < 0 && mark.y >= (mark.x-r)/2) {
-                return true;
+            if(mark.y < 0) {
+                y = (int) -(2 * mark.x + r) / 2;
+                if(mark.y >= y)
+                    return 1;
             }
-        } else {
-            double radius = Math.sqrt(Math.pow(mark.x,2)+Math.pow(mark.y,2));
-            if(mark.y >= 0 && radius <= r) {
-                return true;
+
+        }
+        if(mark.x >= 0 && mark.x <= r) {
+            if(mark.y < 0) {
+                y = (int)(-(r/2));
+                if(mark.y >= y)
+                    return 1;
             }
         }
-        return false;
+        return 0;
     }
 }

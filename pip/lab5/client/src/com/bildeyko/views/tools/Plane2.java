@@ -1,15 +1,12 @@
 package com.bildeyko.views.tools;
 
-import com.bildeyko.Figure;
 import com.bildeyko.Mark;
+import com.bildeyko.ServerConnection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Created by ASUS on 04.12.2014.
@@ -23,7 +20,6 @@ public class Plane2 extends JPanel {
     public int segmentLengthW, segmentLengthH;
     private Integer radius;
     public int offset = 20;
-    private Figure  figure;
 
     public Plane2()
     {
@@ -38,7 +34,6 @@ public class Plane2 extends JPanel {
     public void addMark(Mark point)
     {
         point.setRadius(radius);
-        point.status = figure.checkMark(point);
         if(!marks.contains(point)) {
             marks.add(point);
         } else {
@@ -47,7 +42,7 @@ public class Plane2 extends JPanel {
         this.repaint();
     }
 
-    public void setRadius(Integer rad) {
+    public void setRadius(Integer rad, ServerConnection server) {
         radius = rad;
         scaleX = (float)(2*segmentLengthW)/radius;
         scaleY = (float)(2*segmentLengthH)/radius;
@@ -63,9 +58,9 @@ public class Plane2 extends JPanel {
         Iterator<Mark> i = marks.iterator();
         while (i.hasNext()) {
             Mark current = i.next();
-            current.status = figure.checkMark(current);
+            current.status = server.send(current, rad).status;
             current.setRadius(rad);
-            if(current.status) {
+            if(current.status == 1) {
                 Runnable r = new MarkRunnable(current,this);
                 Thread t = new Thread(r);
                 threads.add(t);
@@ -73,11 +68,6 @@ public class Plane2 extends JPanel {
             }
         }
         this.repaint();
-    }
-
-    public void updateFigure(Figure fig)
-    {
-        this.figure = fig;
     }
 
     public void paintComponent(Graphics g)
@@ -92,13 +82,15 @@ public class Plane2 extends JPanel {
         Iterator<Mark> i = marks.iterator();
         while (i.hasNext()) {
             Mark current = i.next();
-            if(current.status)
+            if(current.status == 2)
+                g.setColor(Color.gray);
+            if(current.status == 1)
                 g.setColor(Color.green);
-            else
+            if(current.status == 0)
                 g.setColor(Color.red);
             int ovalX = (int)(current.x*scaleX) + size.width/2;
             int ovalY = -(int)(current.y*scaleY) + size.height/2;
-            g.drawOval(ovalX-current.currentSize/2,ovalY-current.currentSize/2+1,current.currentSize,current.currentSize);
+            g.drawOval(ovalX-current.currentSize/2 - 1,ovalY-current.currentSize/2,current.currentSize,current.currentSize);
 
             g.drawString("x: "+String.format("%.2f", current.x),ovalX+8, ovalY-10);
             g.drawString("y: "+String.format("%.2f", current.y),ovalX+8, ovalY);
@@ -136,15 +128,15 @@ public class Plane2 extends JPanel {
             g.drawLine(size.width/2+x,size.height/2-0,size.width/2+x,size.height/2-y);
         }
 
-        // Прямая 1 ч
+        // Прямая 4 ч
         for(x=1;x<radius*scaleX;x++) {
-            y = (int)(radius*scaleX);
+            y = (int)(-(radius/2)*scaleX);
             g.drawLine(size.width/2+x,size.height/2-0,size.width/2+x,size.height/2-y);
         }
 
-        // Прямая 4 ч
-        for(x=1;x<radius*scaleX;x++) {
-            y = (int)(x-radius*scaleX)/2;
+        // Прямая 3 ч
+        for(x=-1;x>-(radius/2)*scaleX;x--) {
+            y = (int)-(2*x+radius*scaleX)/2;
             g.drawLine(size.width/2+x,size.height/2-0,size.width/2+x,size.height/2-y);
         }
     }

@@ -22,8 +22,12 @@ int recognize(char * str, char * re, digraph_t * g)
 	for (i = 0; i < g->vertices; i++)
 		marked[i] = 0;
 	digraph_dfs(g, marked, 0);
-	set_init(&setPossible);
-	set_init(&setMatch);
+	result = set_init(&setPossible);
+	if (result)
+		showError("Malloc for setPossible failed.");
+	result = set_init(&setMatch);
+	if (result)
+		showError("Malloc for setMatch failed.");
 
 	for (i = 0; i < g->vertices; i++)
 	{
@@ -87,9 +91,8 @@ int recognize_arr(char * str, char * re, digraph_t * g)
 	int pos_ptr, mat_ptr;
 	int result = -1;
 	int *marked;
+	int item, check;
 
-	int item;
-	int check;
 	pos_ptr = 0;
 	mat_ptr = 0;
 
@@ -179,7 +182,6 @@ int main(int argc, char** argv)
 	char regexp_tmp[BUFFER_SIZE];
 	char input[1000];
 	char buffer[1000];
-	char buffer_output[8192];
 	int result = -1;
 	int ignores_opt, num_opt, set_opt, time_opt, invert_opt, matches_opt;
 	digraph_t *graph = NULL;
@@ -270,7 +272,6 @@ int main(int argc, char** argv)
 	create_nfa(graph, regexp);
 	allTime = 0;
 	count = 1;
-	//setvbuf(stdout, buffer_output, _IOFBF, sizeof(buffer_output));
 	while (!feof(stdin))
 	{
 		fgets(input, 1000, stdin);

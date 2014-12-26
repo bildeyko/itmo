@@ -1,17 +1,16 @@
-Реализован алгоритм,  описанный Р. Седживиком в книге Алгоритмы на Java.  
+п»їР РµР°Р»РёР·РѕРІР°РЅ Р°Р»РіРѕСЂРёС‚Рј,  РѕРїРёСЃР°РЅРЅС‹Р№ Р . РЎРµРґР¶РёРІРёРєРѕРј РІ РєРЅРёРіРµ РђР»РіРѕСЂРёС‚РјС‹ РЅР° Java.  
 http://algs4.cs.princeton.edu/lectures/
-###Ссылки на презентации Роберта из его универа
+###РЎСЃС‹Р»РєРё РЅР° РїСЂРµР·РµРЅС‚Р°С†РёРё Р РѕР±РµСЂС‚Р° РёР· РµРіРѕ СѓРЅРёРІРµСЂР°
 * http://algs4.cs.princeton.edu/lectures/54RegularExpressions.pdf
 * http://algs4.cs.princeton.edu/lectures/42DirectedGraphs.pdf
-* http://algs4.cs.princeton.edu/54regexp/
-###Ссылки на код
+* http://algs4.cs.princeton.edu/54regexp/  
+###РЎСЃС‹Р»РєРё РЅР° РєРѕРґ
 * http://algs4.cs.princeton.edu/42directed/DirectedDFS.java.html
 * http://algs4.cs.princeton.edu/54regexp/Digraph.java.html
 * http://algs4.cs.princeton.edu/54regexp/NFA.java.html
 * http://algs4.cs.princeton.edu/13stacks/Bag.java.html
 * http://algs4.cs.princeton.edu/code/javadoc/Bag.html
-
-###Хорошая статья из методы про регулярки сравнение NFA и Perl
+###РҐРѕСЂРѕС€Р°СЏ СЃС‚Р°С‚СЊСЏ РёР· РјРµС‚РѕРґС‹ РїСЂРѕ СЂРµРіСѓР»СЏСЂРєРё СЃСЂР°РІРЅРµРЅРёРµ NFA Рё Perl
 * http://swtch.com/~rsc/regexp/regexp1.html
 * http://swtch.com/~rsc/regexp/dfa0.c.txt
 * http://swtch.com/~rsc/regexp/regexp3.html

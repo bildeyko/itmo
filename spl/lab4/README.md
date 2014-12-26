@@ -16,3 +16,9 @@ http://algs4.cs.princeton.edu/lectures/
 * http://swtch.com/~rsc/regexp/regexp1.html
 * http://swtch.com/~rsc/regexp/dfa0.c.txt
 * http://swtch.com/~rsc/regexp/regexp3.html
+
+####Статья Томсона (68г)
+* http://www.fing.edu.uy/inco/cursos/intropln/material/p419-thompson.pdf
+
+Построить NFA и DFA по выражению  
+http://hackingoff.com/compilers/regular-expression-to-nfa-dfa

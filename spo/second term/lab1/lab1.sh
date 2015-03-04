@@ -51,15 +51,19 @@ quit_script() {
     exit 0
 }
 
+show_menu() {
+    echo "1. Print a current directory name"
+    echo "2. Print contents of working directory"
+    echo "3. Print current time"
+    echo "4. View a file"
+    echo "5. Remove a file"
+    echo "6. Quit the program"
+    echo "Please, select an item:"
+}
+
 
 echo "(^D to exit)"
-echo "1. Print a current directory name"
-echo "2. Print contents of working directory"
-echo "3. Print current time"
-echo "4. View a file"
-echo "5. Remove a file"
-echo "6. Quit the program"
-echo "Please, select an item:"
+show_menu
 
 #wait input
 while read com
@@ -74,12 +78,6 @@ do
         *) echo "Unknown command" ;;
     esac
     echo ""
-    echo "1. Print a current directory name"
-    echo "2. Print contents of working directory"
-    echo "3. Print current time"
-    echo "4. View a file"
-    echo "5. Remove a file"
-    echo "6. Quit the program"
-    echo "Please, select an item:"
+    show_menu
 done
 

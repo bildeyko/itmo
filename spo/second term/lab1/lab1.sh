@@ -29,6 +29,7 @@ item_3() {
     LANG=en_US.UTF-8
     export LANG
     echo Current time:
+
     date '+%a %h %e %H:%M %Z %Y'
 }
 
@@ -36,31 +37,16 @@ item_4() {
     get_parameter "Enter a file name"
     name=$param
     echo "name: $name"
+
     cat $name
 }
 
 item_5() {
-    integer escape=0
     get_parameter "Enter a file name"
     name=$param
     echo "File: $name"
 
-    if echo "$name" | /usr/xpg4/bin/egrep -q '^[~*]$'
-    then
-	escape=1
-    fi
-
-    if echo "$name" | /usr/xpg4/bin/egrep -q '[[:blank:]][~*][[:blank:]]'
-    then
-	escape=1
-    fi
-    
-    if (( $escape == 1 ))
-    then
-	escaped="'""$name""'"
-    fi
-    echo escape: $escaped
-    ls "$name"
+    rm "$name"
 }
 
 item_6() {

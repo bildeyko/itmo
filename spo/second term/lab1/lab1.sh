@@ -1,12 +1,5 @@
 #!/bin/ksh
 
-echo "1. Print name of current directory"
-echo "2. Print content of working directory"
-echo "3. Print current time"
-echo "4. Print file"
-echo "5. Remove file"
-echo "6. Quit"
-
 param="null"
 
 get_parameter() {
@@ -14,56 +7,79 @@ get_parameter() {
     read param
 }
 
-item_1() {
-    echo input $1
-    echo Current directory:
+name_dir() {
+    echo "Current directory name:"
+
     pwd | awk -F"/" '{print $NF}'
 }
 
-item_2() {
-    echo Content of working directory:
+ls_dir() {
+    echo "Contents of working directory:"
+
     ls
 }
 
-item_3() {
+print_time() {
     LANG=en_US.UTF-8
     export LANG
-    echo Current time:
+    echo "Current time:"
 
     date '+%a %h %e %H:%M %Z %Y'
 }
 
-item_4() {
+cat_file() {
     get_parameter "Enter a file name"
     name=$param
-    echo "name: $name"
+    echo "Showed file: $param"
 
     cat $name
 }
 
-item_5() {
+remove_file() {
     get_parameter "Enter a file name"
     name=$param
-    echo "File: $name"
-
-    rm "$name"
+    echo "Are you sure? (y/n)"
+    read res
+    case $res in
+	y) echo "Removed file: $name"; rm "$name" ;;
+        n) echo "Canceled" ;;
+        *) echo "Unknown choice" ;;
+    esac
 }
 
-item_6() {
+quit_script() {
     exit 0
 }
+
+
+echo "(^D to exit)"
+echo "1. Print a current directory name"
+echo "2. Print contents of working directory"
+echo "3. Print current time"
+echo "4. View a file"
+echo "5. Remove a file"
+echo "6. Quit the program"
+echo "Please, select an item:"
 
 #wait input
 while read com
 do
     case $com in
-        1) item_1 "lalal" ;;
-        2) item_2 ;;
-        3) item_3 ;;
-        4) item_4 ;;
-        5) item_5 ;;
-        6) item_6 ;;
-        *) echo error ;;
+        1) name_dir ;;
+        2) ls_dir ;;
+        3) print_time ;;
+        4) cat_file ;;
+        5) remove_file ;;
+        6) quit_script ;;
+        *) echo "Unknown command" ;;
     esac
+    echo ""
+    echo "1. Print a current directory name"
+    echo "2. Print contents of working directory"
+    echo "3. Print current time"
+    echo "4. View a file"
+    echo "5. Remove a file"
+    echo "6. Quit the program"
+    echo "Please, select an item:"
 done
 

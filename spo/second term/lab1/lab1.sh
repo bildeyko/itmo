@@ -1,4 +1,5 @@
 #!/bin/ksh
+USAGE="usage: lab1"
 
 param="null"
 
@@ -8,41 +9,44 @@ get_parameter() {
 }
 
 name_dir() {
-    echo "Current directory name:"
-
-    pwd | awk -F"/" '{print $NF}'
+    if /bin/pwd 2>>$HOME/lab1_err 1>/dev/null
+    then
+	/bin/pwd | awk -F"/" '{
+            if($(NF)=="") print $0;
+            else print $(NF);
+        }'
+    else
+	echo "Failed to show a directory name" >&2
+    fi
 }
 
 ls_dir() {
-    echo "Contents of working directory:"
-
-    ls
+    ls . 2>>$HOME/lab1_err || echo "Failed to show the contents" >&2
 }
 
 print_time() {
     LANG=en_US.UTF-8
     export LANG
-    echo "Current time:"
-
-    date '+%a %h %e %H:%M %Z %Y'
+    
+    date '+%a %h %e %H:%M %Z %Y' 2>>$HOME/lab1_err || echo "Failed to show a time" >&2
 }
 
 cat_file() {
     get_parameter "Enter a file name"
     name=$param
-    echo "Showed file: $param"
 
-    cat $name
+    cat -- "$name" 2>>$HOME/lab1_err || echo "Failed to show a file" >&2
 }
 
 remove_file() {
     get_parameter "Enter a file name"
     name=$param
-    echo "Are you sure? (y/n)"
+    echo "Are you sure? (yes/no)"
     read res
     case $res in
-	y) echo "Removed file: $name"; rm "$name" ;;
-        n) echo "Canceled" ;;
+	yes) echo "Removed file: $name"
+             rm -- "$name" 2>>$HOME/lab1_err || echo "Failed to delete file" >&2 ;;
+        no) echo "Canceled" ;;
         *) echo "Unknown choice" ;;
     esac
 }
@@ -52,12 +56,12 @@ quit_script() {
 }
 
 show_menu() {
-    echo "1. Current directory name"
-    echo "2. Working directory contents"
-    echo "3. Current time"
-    echo "4. View a file"
-    echo "5. Remove a file"
-    echo "6. Quit"
+    echo 1. Current directory name
+    echo 2. Working directory contents
+    echo 3. Current time
+    echo 4. View a file
+    echo 5. Remove a file
+    echo 6. Quit
     echo "Please, select an item:"
 }
 

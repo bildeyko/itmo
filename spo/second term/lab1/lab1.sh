@@ -56,12 +56,12 @@ quit_script() {
 }
 
 show_menu() {
-    echo 1. Current directory name
-    echo 2. Working directory contents
-    echo 3. Current time
-    echo 4. View a file
-    echo 5. Remove a file
-    echo 6. Quit
+    echo "1. Current directory name"
+    echo "2. Working directory contents"
+    echo "3. Current time"
+    echo "4. View a file"
+    echo "5. Remove a file"
+    echo "6. Quit"
     echo "Please, select an item:"
 }
 

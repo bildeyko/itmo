@@ -1,14 +1,14 @@
 <?php
 	$time_start = microtime();
 	$xVals = $_GET["xVals"];
-	$yVal =  (int) $_GET["yVal"];
+	$yVal =  $_GET["yVal"];
 	$rVals = $_GET["rVals"];
 
 	if(is_null($rVals) || is_null($xVals) || is_null($yVal))
 	{
 		indexPage();
 	} else {
-		if($yVal<-5 || $yVal>3 ) 
+		if(!is_numeric($yVal) || $yVal<-5 || $yVal>3 ) 
 		{
 			resultPage(NULL, NULL, "Неверное значение y");
 			exit;
@@ -18,12 +18,12 @@
 		foreach ($rVals as $r){
 			$r = (int)$r;
 			$tbl = $tbl."<tr><th colspan='2'>R =".$r."</th></tr>";
-			if($r>5 || $r<1) {
+			if(!is_numeric($r) || $r>5 || $r<1) {
 				resultPage(NULL, NULL, "Неверное значение r");
 				exit;
 			}
 			foreach ($xVals as $x){
-				if($x>2 || $x<-2) {
+				if(!is_numeric($x) || $x>2 || $x<-2) {
 					resultPage(NULL, NULL, "Неверное значение x");
 					exit;
 				}

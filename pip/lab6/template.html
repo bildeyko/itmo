@@ -13,10 +13,6 @@
 				background: #F3F3F3;				
 			}
 
-			div, img {
-				/*border: 1px solid black*/;
-			}
-
 			#header {
 				padding: 10px;
 				background: #61D89F;
@@ -48,6 +44,10 @@
 				padding: 10px;
 			}
 
+			/*
+				Input components styles
+			*/
+
 			input[type="submit"] {
 				padding: 10px;
 				font-family: sans-serif;
@@ -67,6 +67,40 @@
 				margin-bottom: 10px;
 			}
 
+			/*
+				Table styles
+			*/
+
+			#table_wrapper {
+				max-height: 500px;
+				width: 230px;
+				overflow: auto;
+			}
+
+			#table_wrapper table {
+				width: 200px;
+				border-spacing: 0px;
+				border-collapse: collapse;
+			}
+
+			#table_wrapper table td {
+				padding: 5px;
+				height: 20px;
+				text-align: center;
+				border: 1px solid #ddd;
+			}
+
+			.cell_point {
+				background: #ddd;
+			}
+
+			.cell_res_good {
+				background: #D2F3AA;
+			}
+
+			.cell_res_bad {
+				background: #F3B5AA;
+			}
 		</style>
 	</head>
 	<body>
@@ -81,35 +115,7 @@
 				<div id="img_container" class="inline">
 					<img src="img/areas.png">
 				</div>
-				<div id="main_container" class="inline">
-					<form id="input_form" action="check.php" method="GET">
-						<label>X</label>
-						<br>
-						<label><input type="checkbox" name="xVals[]" value="-2"/>-2</label>
-						<label><input type="checkbox" name="xVals[]" value="-1.5"/>-1.5</label>
-						<label><input type="checkbox" name="xVals[]" value="-1"/>-1</label>
-						<label><input type="checkbox" name="xVals[]" value="-0.5"/>-0.5</label>
-						<label><input type="checkbox" name="xVals[]" value="0"/>0</label>
-						<label><input type="checkbox" name="xVals[]" value="0.5"/>0.5</label>
-						<label><input type="checkbox" name="xVals[]" value="1"/>1</label>
-						<label><input type="checkbox" name="xVals[]" value="1.5"/>1.5</label>
-						<label><input type="checkbox" name="xVals[]" value="2"/>2</label>
-						<br>
-						<label>Y</label>
-						<br>
-						<input type="text" placeholder="-5...3" name="yVal"/>
-						<br>
-						<label>R</label>
-						<br>
-						<label><input type="checkbox" name="rVals[]" value="1"/>1</label>
-						<label><input type="checkbox" name="rVals[]" value="2"/>2</label>
-						<label><input type="checkbox" name="rVals[]" value="3"/>3</label>
-						<label><input type="checkbox" name="rVals[]" value="4"/>4</label>
-						<label><input type="checkbox" name="rVals[]" value="5"/>5</label>
-						<br>
-						<input type="submit" value="Проверить"/>
-					</form>
-				</div>
+				{body}
 			</div>	
 		</div>
 	</body>

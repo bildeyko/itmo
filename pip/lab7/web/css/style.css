@@ -67,12 +67,12 @@ html, body {
 
 			#table_wrapper {
 				max-height: 500px;
-				width: 230px;
+				width: 250px;
 				overflow: auto;
 			}
 
 			#table_wrapper table {
-				width: 210px;
+				width: 230px;
 				border-spacing: 0px;
 				border-collapse: collapse;
 			}

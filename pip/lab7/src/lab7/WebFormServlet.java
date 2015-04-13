@@ -35,6 +35,7 @@ public class WebFormServlet extends HttpServlet {
                 "\t\t<title>Лабораторная 6</title>\n" +
                 "\n" +
                 "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\"/>"+
+                "<script src=\"js/WebForm.js\"></script>\n"+
                 "\t</head>\n" +
                 "\t<body>\n" +
                 "\n" +
@@ -49,7 +50,7 @@ public class WebFormServlet extends HttpServlet {
                 "\t\t\t\t\t<img src=\"img/areas.png\">\n" +
                 "\t\t\t\t</div>\n" +
                 "<div id=\"main_container\" class=\"inline\">\n" +
-                "\t\t\t\t\t<form id=\"input_form\" action=\"/lab7_war_exploded/lab7\" method=\"POST\">\n" +
+                "\t\t\t\t\t<form id=\"input_form\" action=\"/lab7_war_exploded/lab7\" onsubmit=\"return validateForm()\" method=\"POST\">\n" +
                 "\t\t\t\t\t\t<label>X</label>\n" +
                 "\t\t\t\t\t\t<br>\n" +
                 "\t\t\t\t\t\t<label><input type=\"radio\" name=\"xVal\" value=\"-2\"/>-2</label>\n" +
@@ -76,6 +77,7 @@ public class WebFormServlet extends HttpServlet {
                 "\t\t\t\t\t\t<br>\n" +
                 "\t\t\t\t\t\t<input type=\"submit\" value=\"Submit\"/>\n" +
                 "\t\t\t\t\t</form>\n" +
+                "<div id=\"error_box\"></div>"+
                 "\t\t\t\t</div>" +
                 "\t\t\t</div>\t\n" +
                 "\t\t</div>\n" +

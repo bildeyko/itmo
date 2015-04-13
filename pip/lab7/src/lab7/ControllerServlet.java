@@ -17,6 +17,7 @@ public class ControllerServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        response.setContentType("text/html;charset=utf-8");
         RequestDispatcher dispatcher = request.getRequestDispatcher("form");
         dispatcher.forward(request, response);
     }
@@ -24,6 +25,7 @@ public class ControllerServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        response.setContentType("text/html;charset=utf-8");
         RequestDispatcher dispatcher = request.getRequestDispatcher("check");
         dispatcher.forward(request, response);
     }

@@ -16,8 +16,6 @@ public class AreaCheckServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         long timeout= System.currentTimeMillis();
-        response.setContentType("text/html;charset=utf-8");
-        response.setLocale(new Locale("ru"));
 
         Float xVal = Float.parseFloat(request.getParameter("xVal"));
         Float rVal = Float.parseFloat(request.getParameter("rVal"));
@@ -64,7 +62,7 @@ public class AreaCheckServlet extends HttpServlet {
                 "<html>\n" +
                 "\t<head>\n" +
                 "\t\t<meta charset=\"utf-8\"> \n" +
-                "\t\t<title>Лабораторная 6</title>\n" +
+                "\t\t<title>Lab 7</title>\n" +
                 "\n" +
                 "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\"/>"+
                 "\t</head>\n" +

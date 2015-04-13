@@ -15,9 +15,6 @@ public class WebFormServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        response.setContentType("text/html;charset=utf-8");
-        response.setLocale(new Locale("ru"));
-
         PrintWriter out = response.getWriter();
 
         try {
@@ -32,7 +29,7 @@ public class WebFormServlet extends HttpServlet {
                 "<html>\n" +
                 "\t<head>\n" +
                 "\t\t<meta charset=\"utf-8\"> \n" +
-                "\t\t<title>Лабораторная 6</title>\n" +
+                "\t\t<title>Lab 7</title>\n" +
                 "\n" +
                 "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\"/>"+
                 "<script src=\"js/WebForm.js\"></script>\n"+

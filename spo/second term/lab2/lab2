@@ -1,0 +1,19 @@
+#!/bin/ksh
+#IFS=''
+for object in $(ls -dt -- "$1"/*)
+do
+ # echo $object
+	if [[ -d "$object" ]]
+	then
+	   # echo $object
+	    if [[ "$object" = -* ]]; then
+		link=./$object
+	    else
+		link=$object
+	    fi
+	    if [ $(find "$link"/* 2>/dev/null -type d -exec echo \;| wc -l) -ne 0 ]
+	    then
+		echo $object
+	    fi
+	fi
+done

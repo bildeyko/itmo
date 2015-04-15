@@ -47,7 +47,7 @@ public class WebFormServlet extends HttpServlet {
                 "\t\t\t\t\t<img src=\"img/areas.png\">\n" +
                 "\t\t\t\t</div>\n" +
                 "<div id=\"main_container\" class=\"inline\">\n" +
-                "\t\t\t\t\t<form id=\"input_form\" action=\"/lab7_war_exploded/lab7\" onsubmit=\"return validateForm()\" method=\"POST\">\n" +
+                "\t\t\t\t\t<form id=\"input_form\" action=\"/lab7_Web/lab7\" onsubmit=\"return validateForm()\" method=\"POST\">\n" +
                 "\t\t\t\t\t\t<label>X</label>\n" +
                 "\t\t\t\t\t\t<br>\n" +
                 "\t\t\t\t\t\t<label><input type=\"radio\" name=\"xVal\" value=\"-2\"/>-2</label>\n" +

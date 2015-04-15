@@ -1,7 +1,7 @@
 function validateForm() {
     var y = document.forms["input_form"]["yVal"].value;
-    var x = document.forms["input_form"]["xVal"].value;
-    var r = document.forms["input_form"]["rVal"].value;
+    var x = getRadioValue(document.forms["input_form"]["xVal"]);
+    var r = getRadioValue(document.forms["input_form"]["rVal"]);
     console.log(x);
     if (x == "") {
         document.getElementById("error_box").innerHTML = "Please, select the X value";
@@ -15,5 +15,14 @@ function validateForm() {
         document.getElementById("error_box").innerHTML = "Please, select the R value";
         return false;
     }
+}
+
+function getRadioValue(group) {
+    for (var i=0, iLen=group.length; i<iLen; i++) {
+        if (group[i].checked) {
+            return group[i].value;
+        }
+    }
+    return '';
 }
 

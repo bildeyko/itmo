@@ -85,7 +85,7 @@ public class AreaCheckServlet extends HttpServlet {
                 cell +
                 "</table>" +
                 "<p>Runtime: " + timeout + "ms</p>"+
-                "<form id=\"input_form\" action=\"/lab7_war_exploded/lab7\" method=\"GET\">\n" +
+                "<form id=\"input_form\" action=\"/lab7_Web/lab7\" method=\"GET\">\n" +
                 "\t\t\t\t\t\t\t<input type=\"submit\" value=\"Check other data\"/>\n" +
                 "\t\t\t\t\t\t</form>" +
                 "\t\t\t\t</div>" +

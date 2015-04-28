@@ -15,7 +15,6 @@ function validateForm() {
 }
 
 function getCheckboxValue(group) {
-    console.log(group);
     for (var i=0, iLen=group.length; i<iLen; i++) {
         if (group[i].checked) {
             return group[i].value;
@@ -100,7 +99,7 @@ function checkR() {
 }
 
 function imageClickHandler(e) {
-    var evt = window.event || e;
+    var evt = e || window.event;
     if(checkR()) {
         var r = getCheckboxValue(document.getElementsByClassName("rCheckbox"));
         var posX = evt.offsetX?(evt.offsetX):evt.pageX-document.getElementById("graph_img").offsetLeft;
@@ -112,15 +111,14 @@ function imageClickHandler(e) {
         globalPoint.r = r;
         globalPoint.x = (posX/normR).toFixed(2);
         globalPoint.y = (posY/normR).toFixed(2);
-        console.log("x = " + globalPoint.x);
-        console.log("y = " + globalPoint.y);
+        document.getElementById("error_box").innerHTML = "";
         showGlobalPoint();
     }
 }
 
 function checkedHandler(e) {
     if(checkR()) {
-        var evt = window.event || e;
+        var evt = e || window.event;
         var group = document.getElementsByClassName("rCheckbox");
         globalPoint.r = getCheckboxValue(group);
         for (var i = 0, iLen = group.length; i < iLen; i++) {

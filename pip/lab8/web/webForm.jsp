@@ -18,7 +18,7 @@
     </div>
     <div id="center_container">
       <div id="img_container" class="inline">
-        <img id="graph_img" src="img/areas.png" onclick="imageClickHandler()">
+        <img id="graph_img" src="img/areas.png" onclick="imageClickHandler(event)">
         <div id="error_box"></div>
       </div>
       <div id="main_container" class="inline">
@@ -43,11 +43,11 @@
           <br>
           <label>R</label>
           <br>
-          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler()" value="1"/>1</label>
-          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler()" value="2"/>2</label>
-          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler()" value="3"/>3</label>
-          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler()" value="4"/>4</label>
-          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler()" value="5"/>5</label>
+          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler(event)" value="1"/>1</label>
+          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler(event)" value="2"/>2</label>
+          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler(event)" value="3"/>3</label>
+          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler(event)" value="4"/>4</label>
+          <label><input class="rCheckbox" type="checkbox" name="rVal" onchange="checkedHandler(event)" value="5"/>5</label>
           <br>
           <label>Point to check: </label>
           <br>

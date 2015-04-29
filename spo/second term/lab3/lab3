@@ -1,0 +1,41 @@
+#!/bin/ksh
+USAGE="usage: lab3 file"
+
+file_name=$1
+
+if [[ -d "$file_name" || -z "$file_name" ]]; then
+	echo $USAGE
+	exit
+fi
+if [[ ! -a "$file_name" ]]; then
+		echo error: file not found
+		echo $USAGE
+		exit
+fi
+if [[ "$file_name" = -* ]]; then
+	file_name=./$file_name
+fi	
+
+owner_perm=$(ls -l "$file_name" | cut -c4)
+group_perm=$(ls -l "$file_name" | cut -c7)
+all_perm=$(ls -l "$file_name" | cut -c10)
+owner_name=$(ls -l "$file_name" | awk '{print $3}')
+group_name=$(ls -l "$file_name" | awk '{print $4}')
+group_id=$(getent group | awk -F: "{if(\$1 == \"$group_name\") {print \$3; exit}}")
+
+if [[ $all_perm = "x" ]]; then
+	getent passwd | awk -F: '{printf "%s,",$1}'
+	echo
+	exit
+fi
+
+if [[ $group_perm = "x" ]]; then
+	getent passwd | awk -F: "{if(\$4 == \"$group_id\") printf \"%s,\",\$1}"
+	getent group | awk -F: "{if(\$3 == \"$group_id\") printf \"%s\",\$4}"
+	echo
+	exit
+fi
+
+if [[ $owner_perm = "x" ]]; then
+	echo $owner_name
+fi

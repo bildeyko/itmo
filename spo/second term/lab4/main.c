@@ -45,10 +45,10 @@ int main(int argc, char  *argv[])
 		usage();
 	if(strcmp(argv[0], "-"))
 		if ((flds1 = open(argv[0], O_RDONLY)) < 0)
-			if(!sflag) sys_error("open");
+			if(!sflag) sys_error(argv[0]);
 	if(strcmp(argv[1], "-"))
 		if ((flds2 = open(argv[1], O_RDONLY)) < 0)
-			if(!sflag) sys_error("open");
+			if(!sflag) sys_error(argv[1]);
 		
 	if(argc>2){
 		offset1 = atoi(argv[2]);
@@ -66,35 +66,51 @@ int main(int argc, char  *argv[])
 
 int compare(char* argv[], int flds1, int flds2)
 {
-	int n1, n2, i;
+	int n1, n2, i, j;
 	size_t c_count, l_count;
 	unsigned char buf1[BUFFSIZE], buf2[BUFFSIZE];
 	c_count = 1;
 	l_count = 1;
 	
-	while ( (n1 = read(flds1, buf1, BUFFSIZE)) > 0 &&
-				(n2 = read(flds2, buf2, BUFFSIZE)) > 0) {					
-		for(i=0; i<( (n1<n2) ? n1 : n2 ); i++) {
-			if(buf1[i] != buf2[i]) {
+	n1 = read(flds1, buf1, BUFFSIZE);
+	n2 = read(flds2, buf2, BUFFSIZE);
+	
+	i=0;
+	j=0;
+	while(1) {
+		if(n1 == 0 && n2 == 0) 
+			break;
+		if(n1 == 0) {
+			if(!sflag) print_eof(argv[0]);
+			break;
+		}
+		if(n2 == 0) {
+			if(!sflag) print_eof(argv[1]);
+			break;
+		}
+		
+		for(; i<n1 & j<n2; i++, j++) {
+			if(buf1[i] != buf2[j]) {
 				if(!lflag) {
 					if(!sflag) print_diff(argv[0], argv[1], c_count, l_count);
 					goto Exit;
 				} else 
-					print_lflag(c_count,  dec_to_oct(buf1[i]), dec_to_oct(buf2[i]));
+					print_lflag(c_count,  dec_to_oct(buf1[i]), dec_to_oct(buf2[j]));
 			}
 			if(buf1[i] == '\n')
 				l_count ++;
 			c_count ++;
 		}
 		
-		if (n1 < n2) {
-			if(!sflag) print_eof(argv[0]);
-			break;
-		} else if (n1 > n2) {
-			if(!sflag) print_eof(argv[1]);
-			break;
+		if(i == n1) {
+			n1 = read(flds1, buf1, BUFFSIZE);
+			i=0;
 		}
-	}
+		if(j == n2) {
+			n2 = read(flds2, buf2, BUFFSIZE);
+			j=0;
+		}
+	}	
 	
 	if(n1<0 || n2<0)
 		if(!sflag) sys_error("read");

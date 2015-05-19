@@ -51,7 +51,7 @@ void print_lflag(size_t count, int n1, int n2)
 
 void print_eof(char* path)
 {
-	print("EOF on ");
+	print("bcmp: EOF on ");
 	print(path);
 	print("\n");
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ace="http://www.icefaces.org/icefaces/components">
+    <h:body>
+        <ui:composition template="template.xhtml">
+            <ui:define name="main_container">
+                <h2>The form page</h2>
+                <div>
+                    <h:form id="input_form">
+                        <h:outputLabel value="X" />
+                        <br/>
+                        <h:selectOneMenu>
+                            <f:selectItem itemLabel="-5"/>
+                            <f:selectItem itemLabel="-4"/>
+                            <f:selectItem itemLabel="-3"/>
+                            <f:selectItem itemLabel="-2"/>
+                            <f:selectItem itemLabel="-1"/>
+                            <f:selectItem itemLabel="0"/>
+                            <f:selectItem itemLabel="1"/>
+                            <f:selectItem itemLabel="2"/>
+                            <f:selectItem itemLabel="3"/>
+                        </h:selectOneMenu>
+                        <br/>
+                        <h:outputLabel value="Y" />
+                        <br/>
+                        <h:inputText required="true"
+                                     requiredMessage="Y value is required"/>
+                        <br/>
+                        <h:outputLabel value="R" />
+                        <br/>
+                        <ace:sliderEntry min="1" max="4" showLabels="true" stepPercent="16.66" length="142"/>
+                        <h:commandButton value="Submit" accesskey="s"/>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

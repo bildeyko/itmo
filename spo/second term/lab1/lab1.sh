@@ -1,5 +1,6 @@
-#!/bin/ksh
+#!/bin/ksh --
 USAGE="usage: lab1"
+IFS=""
 
 param="null"
 
@@ -44,8 +45,7 @@ remove_file() {
     echo "Are you sure? (yes/no)"
     read res
     case $res in
-	yes) echo "Removed file: $name"
-             rm -- "$name" 2>>$HOME/lab1_err || echo "Failed to delete file" >&2 ;;
+	yes) rm -- "$name" 2>>$HOME/lab1_err && echo "Removed file: $name" || echo "Failed to delete file" >&2 ;;
         no) echo "Canceled" ;;
         *) echo "Unknown choice" ;;
     esac
@@ -70,7 +70,7 @@ echo "(^D to exit)"
 show_menu
 
 #wait input
-while read com
+while read com trash
 do
     case $com in
         1) name_dir ;;

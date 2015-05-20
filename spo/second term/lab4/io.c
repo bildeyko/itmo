@@ -18,9 +18,9 @@ void print_err(const char* err)
 void print_diff(char* path1, char* path2, int chr, int line)
 {
 	char chr_tmp[12]={0x0};
-	sprintf(chr_tmp,"%11d", chr);
+	sprintf(chr_tmp,"%d", chr);
 	char line_tmp[12]={0x0};
-	sprintf(line_tmp,"%11d", line);
+	sprintf(line_tmp,"%d", line);
 	
 	print(path1);
 	print(" ");
@@ -35,16 +35,16 @@ void print_diff(char* path1, char* path2, int chr, int line)
 void print_lflag(size_t count, int n1, int n2) 
 {
 	char count_tmp[12]={0x0};
-	sprintf(count_tmp,"%11d", count);
+	sprintf(count_tmp,"%d", count);
 	char n1_tmp[4]={0x0};
-	sprintf(n1_tmp,"%3d", n1);
+	sprintf(n1_tmp,"%d", n1);
 	char n2_tmp[4]={0x0};
-	sprintf(n2_tmp,"%3d", n2);
+	sprintf(n2_tmp,"%d", n2);
 	
 	print(count_tmp);
-	print(" ");
+	print("\t");
 	print(n1_tmp);
-	print(" ");
+	print("\t");
 	print(n2_tmp);
 	print("\n");
 }
@@ -67,7 +67,7 @@ void error(const char* err)
 void sys_error(const char* err)
 {
 	char errno_tmp[4]={0x0};
-	sprintf(errno_tmp,"%3d", errno);
+	sprintf(errno_tmp,"%d", errno);
 	
 	print_err("bcmp: ");
 	print_err(errno_tmp);

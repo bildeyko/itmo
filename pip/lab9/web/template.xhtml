@@ -5,20 +5,35 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://java.sun.com/jsf/html">
     <h:head>
-            <h:outputStylesheet library="css" name="style.css"/>
+        <h:outputStylesheet library="css" name="style.css"/>
+        <h:outputScript library="js" name="paintingCanvas.js"/>
+        <h:outputScript library="js" name="jquery-2.1.4.min.js"/>
         <title>Lab 9</title>
     </h:head>
     <h:body>
         <div id="wrapper">
             <div id="header">
+                <div class="inline">
                 <p>Nikolay Bildeyko</p>
                 <p>group 2101</p>
-                <p>variant 1147</p>
+                <p>variant 1233</p>
+                </div>
+                <div id="clock" class="inlineRight"/>
             </div>
             <div id="center_container">
                 <div id="img_container" class="inline">
+                    <canvas width="350px" height="350px" id="paintingCanvas">
+                        Canvas not supported.
+                    </canvas>
+                    <h:form id="canvas_form" styleClass="invisible" >
+                        <h:inputHidden id="canvas_x" value="#{checkController.x}" />
+                        <h:inputHidden id="canvas_y" value="#{checkController.y}" />
+                        <h:inputHidden id="canvas_r" value="#{checkController.r}" />
+                        <h:commandButton id="check_canvas" style="display: none" action="#{checkController.checkCanvas}"/>
+                        <h:inputHidden id="check_result" value="#{checkController.status}" />
+                    </h:form>
                 </div>
                 <div id="main_container" class="inline">
                     <ui:insert name="main_container"></ui:insert>

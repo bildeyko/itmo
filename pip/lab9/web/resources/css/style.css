@@ -1,97 +1,119 @@
 html, body {
-				height: 100%;
-				padding: 0px;
-				margin: 0px;
-				font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif;
-				font-size: 13pt;
-				background: #F3F3F3;				
-			}
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif;
+	font-size: 13pt;
+	background: #F3F3F3;
+}
 
-			#header {
-				padding: 10px;
-				background: #61D89F;
-			}
+#header {
+	padding: 10px;
+	background: #61D89F;
+}
 
-			#header p {
-				margin-top: 0px;
-				margin-bottom: 0px;
-				font-family: fantasy;
-				font-size: 15pt;
-				color: #363636;	
-			}
+#header p {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-family: fantasy;
+	font-size: 15pt;
+	color: #363636;
+}
 
-			#wrapper {
-				position: relative;
-				height: 100%;
-				width: 55%;
-				min-width: 440px;
-				margin: 0px auto ;
-				background: #FFF;
-			}
+#wrapper {
+	position: relative;
+	height: 100%;
+	width: 55%;
+	min-width: 440px;
+	margin: 0px auto ;
+	background: #FFF;
+}
 
-			.inline {
-				display: inline-block;
-				vertical-align:top;
-			}
+.inline {
+	display: inline-block;
+	vertical-align:top;
+}
+.inlineLeft, .inlineRight {
+	position: absolute;
+	display: inline;
+}
 
-			#center_container > div {
-				padding: 10px;
-			}
+.inlineRight {
+	right: 10px;
+}
 
-			/*
-				Input components styles
-			*/
+#center_container > div {
+	padding: 10px;
+}
 
-			input[type="submit"], button {
-				padding: 10px;
-				font-family: sans-serif;
-				font-size: 18px;
-				box-shadow: none;
-				border-radius: none;
-				border: solid 1px #dcdcdc;
-				background-color: #DDDDDD; 
-				color: #525050;
-			}
+/*
+	Input components styles
+*/
 
-			input[type="submit"]:hover, button:hover{
-				box-shadow: 0 0 1px 1px #44C0C7;
-			}
+input[type="submit"], button {
+	padding: 10px;
+	font-family: sans-serif;
+	font-size: 18px;
+	box-shadow: none;
+	border-radius: none;
+	border: solid 1px #dcdcdc;
+	background-color: #DDDDDD;
+	color: #525050;
+}
 
-			#input_form *{
-				margin-bottom: 10px;
-			}
+input[type="submit"]:hover, button:hover{
+	box-shadow: 0 0 1px 1px #44C0C7;
+}
 
-			/*
-				Table styles
-			*/
+#input_form *{
+	margin-bottom: 10px;
+}
 
-			#table_wrapper {
-				max-height: 500px;
-				width: 250px;
-				overflow: auto;
-			}
+/*
+	Table styles
+*/
 
-			#table_wrapper table {
-				width: 230px;
-				border-spacing: 0px;
-				border-collapse: collapse;
-			}
+#table_wrapper {
+	max-height: 500px;
+	width: 270px;
+	overflow: auto;
+}
 
-			#table_wrapper table td {
-				padding: 5px;
-				height: 20px;
-				text-align: center;
-				border: 1px solid #ddd;
-			}
+#table_wrapper table {
+	width: 250px;
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
 
-			.cell_point {
-				background: #ddd;
-			}
+#table_wrapper table td {
+	padding: 5px;
+	height: 20px;
+	text-align: center;
+	border: 1px solid #ddd;
+}
 
-			.cell_res_good {
-				background: #D2F3AA;
-			}
+.cell_point {
+	background: #ddd;
+}
 
-			.cell_res_bad {
-				background: #F3B5AA;
-			}
+.cell_res_good {
+	background: #D2F3AA;
+}
+
+.cell_res_bad {
+	background: #F3B5AA;
+}
+
+/*
+	Results
+*/
+
+.text_res_good {
+	color: #408242;
+	font-size: 15pt;
+}
+
+.text_res_bad {
+	color: #AA3133;
+	font-size: 15pt;
+}

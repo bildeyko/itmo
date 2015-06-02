@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ace="http://www.icefaces.org/icefaces/components"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="template.xhtml">
+            <ui:define name="main_container">
+                <div>
+                    <h:form id="input_form">
+                        <h:outputLabel for="Xform" value="X" />
+                        <br/>
+                        <h:selectOneMenu id="Xform" value="#{checkController.x}">
+                            <f:selectItem itemLabel="-5" itemValue="-5"/>
+                            <f:selectItem itemLabel="-4" itemValue="-4"/>
+                            <f:selectItem itemLabel="-3" itemValue="-3"/>
+                            <f:selectItem itemLabel="-2" itemValue="-2"/>
+                            <f:selectItem itemLabel="-1" itemValue="-1"/>
+                            <f:selectItem itemLabel="0" itemValue="0"/>
+                            <f:selectItem itemLabel="1" itemValue="1"/>
+                            <f:selectItem itemLabel="2" itemValue="2"/>
+                            <f:selectItem itemLabel="3" itemValue="3"/>
+                        </h:selectOneMenu>
+                        <br/>
+                        <h:outputLabel for="Yform" value="Y" />
+                        <br/>
+                        <h:inputText id="Yform" required="true"
+                                     requiredMessage="Y value is required"
+                                     validatorMessage="Y must be from -5.0 to 3.0"
+                                     value="#{checkController.y}">
+                            <f:validateDoubleRange minimum="-5.0" maximum="3.0" for="Yform"/>
+                        </h:inputText>
+                        <h:message for="Yform" id="m1" style="color: darkred"/>
+                        <br/>
+                        <h:outputLabel for="slider" value="R " />
+                        <h:outputText id="sliderOutput" value="#{checkController.r}"/>
+                        <br/>
+                        <ace:sliderEntry id="slider" min="1" max="4" showLabels="true" stepPercent="50" length="142" clickableRail="true"
+                                value="#{checkController.r}">
+                            <ace:ajax execute="@this"
+                                      onSuccess="rChangeLinstener();"/>
+                        </ace:sliderEntry>
+                        <h:commandButton id="submit" value="Submit" action="#{checkController.check}" accesskey="s"/> <!--accesskey ??  -->
+                    </h:form>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

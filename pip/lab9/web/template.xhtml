@@ -8,8 +8,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://java.sun.com/jsf/html">
     <h:head>
         <h:outputStylesheet library="css" name="style.css"/>
+        <h:outputScript name="jsf.js" library="javax.faces"/>
         <h:outputScript library="js" name="paintingCanvas.js"/>
-        <h:outputScript library="js" name="jquery-2.1.4.min.js"/>
         <title>Lab 9</title>
     </h:head>
     <h:body>
@@ -31,12 +31,42 @@
                         <h:inputHidden id="canvas_x" value="#{checkController.x}" />
                         <h:inputHidden id="canvas_y" value="#{checkController.y}" />
                         <h:inputHidden id="canvas_r" value="#{checkController.r}" />
-                        <h:commandButton id="check_canvas" style="display: none" action="#{checkController.checkCanvas}"/>
+                        <h:commandButton id="check_canvas" style="display: none">
+                            <f:ajax event="click" execute="@form" render="check_result" listener="#{checkController.checkCanvas}" onevent="checklistener"/>
+                        </h:commandButton>
                         <h:inputHidden id="check_result" value="#{checkController.status}" />
                     </h:form>
+
                 </div>
                 <div id="main_container" class="inline">
                     <ui:insert name="main_container"></ui:insert>
+                    <div id="table_wrapper">
+                        <p>Previous checks:</p>
+                        <h:dataTable id="resTable" value="#{listMarks.marks}" var="m">
+                            <h:column>
+                                <f:facet name="header">R</f:facet>
+                                #{m.r}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">X</f:facet>
+                                #{m.x}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Y</f:facet>
+                                #{m.y}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Result</f:facet>
+                                <h:outputText value="true" rendered="#{m.status == true}" />
+                                <h:outputText value="false" rendered="#{m.status == false}" />
+                                <!--<script type="application/javascript">
+                                    //console.log(#{m.x});
+                                    if(context)
+                                        drawPoint(#{m.x}, #{m.y}, #{m.status});
+                                </script>-->
+                            </h:column>
+                        </h:dataTable>
+                    </div>
                 </div>
             </div>
         </div>

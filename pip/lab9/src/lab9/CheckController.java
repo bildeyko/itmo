@@ -84,4 +84,8 @@ public class CheckController implements Serializable {
         }
         return false;
     }
+
+    public Boolean fixR() {
+        return true;
+    }
 }

@@ -36,37 +36,18 @@
                         </h:inputText>
                         <h:message for="Yform" id="m1" style="color: darkred"/>
                         <br/>
-                        <h:outputLabel for="slider" value="R " /> <h:outputText id="sliderOutput" value="#{checkController.r}"/>
+                        <h:outputLabel for="slider" value="R " />
+                        <h:outputText id="sliderOutput" value="#{checkController.r}"/>
                         <br/>
                         <ace:sliderEntry id="slider" min="1" max="4" showLabels="true" stepPercent="50" length="142" clickableRail="true"
                                 value="#{checkController.r}">
-                            <ace:ajax />
+                            <ace:ajax execute="@this"
+                                      onSuccess="rChangeLinstener();"/>
                         </ace:sliderEntry>
                         <h:commandButton id="submit" value="Submit" action="#{checkController.check}" accesskey="s"/> <!--accesskey ??  -->
                     </h:form>
                 </div>
-                <div id="table_wrapper">
-                    <p>Previous checks:</p>
-                    <h:dataTable value="#{listMarks.marks}" var="m">
-                        <h:column>
-                            <f:facet name="header">R</f:facet>
-                            #{m.r}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">X</f:facet>
-                            #{m.x}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Y</f:facet>
-                            #{m.y}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Result</f:facet>
-                            <h:outputText styleClass="text_res_good" value="Belongs" rendered="#{m.status == true}" />
-                            <h:outputText styleClass="text_res_bad" value="Doesn't belong" rendered="#{m.status == false}" />
-                        </h:column>
-                    </h:dataTable>
-                </div>
+
             </ui:define>
         </ui:composition>
     </h:body>

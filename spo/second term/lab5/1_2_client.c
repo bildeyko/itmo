@@ -23,7 +23,8 @@ main(int argc, char  *argv[])
 	while(1)
 	{
 		printf("pid: %d uid: %d gid: %d\n", info->pid, info->uid, info->gid);
-		printf("     secs: %d avg: %.3f %.3f %.3f\n", info->secs, info->loadavg1, info->loadavg5, info->loadavg15);
+		printf("     secs: %d avg: %.3f %.3f %.3f\n", 
+				info->secs, info->loadavg1, info->loadavg5, info->loadavg15);
 		sleep(1);
 	}
 	

@@ -55,7 +55,7 @@ main(int argc, char  *argv[])
 			
 		close(fd[0]);
 		
-		if (execl(UTIL, (char *)0) < 0)
+		if (execl(UTIL, UTIL, (char *)0) < 0)
 			print_err("execl");
 	}
 	exit(0);

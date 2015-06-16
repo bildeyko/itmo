@@ -83,7 +83,7 @@ doaction(int sock)
 		}
 		
 		if ((dir = opendir (buffer)) == NULL) {
-			char str1[] = "Can't open the ";
+			char str1[] = "\tCan't open the ";
 			write(sock , str1 , strlen(str1));
 			write(sock , buffer , strlen(buffer));
 			write(sock , "\n" , 1);

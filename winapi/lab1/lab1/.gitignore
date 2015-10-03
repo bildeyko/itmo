@@ -1,8 +1,9 @@
-lab1/lab1.vcxproj
-lab1/lab1.vcxproj.filters
-lab1/lab1.vcxproj.user
+lab1/*.vcxproj
+lab1/*.vcxproj.filters
+lab1/*.vcxproj.user
 Debug/
 Release/
 lab1/Debug/
 lab1/Release/
 lab1/lab1.opensdf
+*.opensdf

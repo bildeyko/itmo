@@ -48,7 +48,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wcex.lpszMenuName = 0;
-	wcex.lpszClassName = L"APP_NAME";
+	wcex.lpszClassName = L"Lab 1";
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
 
 	return RegisterClassEx(&wcex);

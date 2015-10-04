@@ -15,6 +15,8 @@
 
 #define SEGMENT 20
 #define TWOPI (2*3.141592653589793238464)
+#define PI 3.141592653589793238464
+#define PISIZE 100
 
 HINSTANCE hInst;
 
@@ -80,44 +82,57 @@ void ChoosingColor(HWND hWnd, COLORREF &col)
 	}
 }
 
-void GenPointArray(POINT ** arr, int x1, int x2, int width, int height)
+int GenPointArray(POINT ** arr, int x1, int x2, int width, int height, int leftOffset)
 {
-	int num, pxs, test;
+	int num, pxs;
+	int realX1, realX2;
 
-	num = abs(x1) + abs(x2);
-	pxs = num * SEGMENT;
+	realX1 = (x1 / PI) * PISIZE;
+	realX2 = (x2 / PI) * PISIZE;
+	pxs = abs(realX1) + abs(realX2);
 
 	*arr = (POINT*)malloc(sizeof(POINT)*pxs);
 	for (int i = 0; i < pxs; i++)
 	{
-		(*arr)[i].x = i*width / pxs;
-		(*arr)[i].y = (int)(height / 2 * (1 - sin(TWOPI*i / pxs)));
+		(*arr)[i].x = realX1 + width / 2 + i - leftOffset;
+		(*arr)[i].y = (int)(height / 2 * (1 - sin(TWOPI * (i + realX1) / (2 * PISIZE))));
 	}
+	return pxs;
 }
 
-void drawFunc(HDC hdc, int width, int height, COLORREF cosColor, COLORREF sinColor) {
-	// х ось
+void drawFunc(HDC hdc, int width, int height, POINT * sinPoints, int lenght, int lineWidth,  COLORREF cosColor, COLORREF sinColor) {
+	HPEN hPen, hOldPen;
+	hPen = CreatePen(PS_SOLID, 1, sinColor);
+	hOldPen = (HPEN)SelectObject(hdc, hPen);	
+	for (int i = 0; i < lineWidth; i++) {
+		for (int j = 0; j < lenght; j++)
+			sinPoints[j].x++;
+		Polyline(hdc, sinPoints, lenght);
+	}
+	SelectObject(hdc, hOldPen);
+	DeleteObject(hPen);
+
+	// x-axis
 	MoveToEx(hdc, 0, height / 2, (LPPOINT)NULL);
 	LineTo(hdc, width, height / 2);
 	TextOut(hdc, width - 10, height / 2 - 20, L"X", 1);
-	// стрелка
+	// x arrow
 	MoveToEx(hdc, width - 8, height / 2 - 4, (LPPOINT)NULL);
 	LineTo(hdc, width, height / 2);
 	MoveToEx(hdc, width - 8, height / 2 + 4, (LPPOINT)NULL);
 	LineTo(hdc, width, height / 2);
-	// у ось
+	// y-axis
 	MoveToEx(hdc, width / 2, 0, (LPPOINT)NULL);
 	LineTo(hdc, width / 2, height);
 	TextOut(hdc, width / 2 + 50, 5, L"Y", 1);
 
 	TextOut(hdc, width / 2 + 5, 0, L"1", 1);
 	TextOut(hdc, width / 2 + 5, height - 14, L"-1.0", 4);
-	// стрелка
+	// y arrow
 	MoveToEx(hdc, width / 2, 0, (LPPOINT)NULL);
 	LineTo(hdc, width / 2 - 8, 4);
 	MoveToEx(hdc, width / 2, 0, (LPPOINT)NULL);
 	LineTo(hdc, width / 2 + 8, 4);
-
 }
 
 
@@ -175,9 +190,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		height = hwndInfo.rcClient.bottom - hwndInfo.rcClient.top;
 
 		POINT * arr;
+		int lenght;
 
-		GenPointArray(&arr, x1, x2, width, height);
-		drawFunc(hdc, width, height, cosColor, sinColor);
+		lenght = GenPointArray(&arr, x1, x2, width, height, (lineWidth-1)/2);
+		drawFunc(hdc, width, height, arr, lenght, lineWidth, cosColor, sinColor);
 
 		free(arr);
 		EndPaint(hWnd, &ps);
@@ -189,15 +205,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			case SINBUTTON_ID:
 				ChoosingColor(hWnd, sinColor);
+				InvalidateRect(hWnd, NULL, TRUE);
 				break;
 			case COSBUTTON_ID:
 				ChoosingColor(hWnd, cosColor);
+				InvalidateRect(hWnd, NULL, TRUE);
 				break;
 			case X1TEXT_ID:
 				if (wmEvent == EN_UPDATE) {
 					x1 = GetDlgItemInt(hWnd, X1TEXT_ID, &fError, TRUE);
 					if (fError == FALSE) {
-						MessageBox(hWnd, L"Wrong number", NULL, MB_OK);
+						//MessageBox(hWnd, L"Wrong number", NULL, MB_OK);
 					}
 				}
 				InvalidateRect(hWnd, NULL, TRUE);
@@ -206,7 +224,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				if (wmEvent == EN_UPDATE) {
 					x2 = GetDlgItemInt(hWnd, X2TEXT_ID, &fError, TRUE);
 					if (fError == FALSE) {
-						MessageBox(hWnd, L"Wrong number", NULL, MB_OK);
+						//MessageBox(hWnd, L"Wrong number", NULL, MB_OK);
 					}
 				}
 				InvalidateRect(hWnd, NULL, TRUE);
@@ -215,7 +233,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				if (wmEvent == EN_UPDATE) {
 					lineWidth = GetDlgItemInt(hWnd, LINEWIDTH_ID, &fError, FALSE);
 					if (fError == FALSE) {
-						MessageBox(hWnd, L"Wrong number", NULL, MB_OK);
+						//MessageBox(hWnd, L"Wrong number", NULL, MB_OK);
 					}
 				}
 				InvalidateRect(hWnd, NULL, TRUE);

@@ -139,18 +139,18 @@ void drawAxes(HDC hdc, int width, int height)
 	MoveToEx(hdc, 0, height / 2, (LPPOINT)NULL);
 	LineTo(hdc, width, height / 2);
 	// x arrow
-	MoveToEx(hdc, width - 8, height / 2 - 4, (LPPOINT)NULL);
-	LineTo(hdc, width, height / 2);
-	MoveToEx(hdc, width - 8, height / 2 + 4, (LPPOINT)NULL);
-	LineTo(hdc, width, height / 2);
+	MoveToEx(hdc, width, height / 2, (LPPOINT)NULL);
+	LineTo(hdc, width - 8, height / 2 - 4);
+	MoveToEx(hdc, width, height / 2, (LPPOINT)NULL);
+	LineTo(hdc, width - 8, height / 2 + 4);
 	// y-axis	
 	MoveToEx(hdc, width / 2, 0, (LPPOINT)NULL);
 	LineTo(hdc, width / 2, height);
 	// y arrow
 	MoveToEx(hdc, width / 2, 0, (LPPOINT)NULL);
-	LineTo(hdc, width / 2 - 8, 4);
+	LineTo(hdc, width / 2 - 4, 8);
 	MoveToEx(hdc, width / 2, 0, (LPPOINT)NULL);
-	LineTo(hdc, width / 2 + 8, 4);
+	LineTo(hdc, width / 2 + 4, 8);
 }
 
 

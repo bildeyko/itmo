@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <tchar.h>
 #include "MyWindow.h"
-using namespace std;
 
 BOOL MyWindow::isReg = FALSE;
 

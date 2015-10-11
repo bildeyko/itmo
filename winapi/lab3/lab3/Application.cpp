@@ -2,7 +2,6 @@
 #include <tchar.h>
 #include "Application.h"
 #include "MyWindow.h"
-using namespace std;
 
 Application::Application(HINSTANCE hInstance) {
 	hInst = hInstance;

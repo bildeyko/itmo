@@ -11,6 +11,7 @@ class MyWindow {
 
 	void RegClass(LPTSTR className);	
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	static int count;
 public:
 	MyWindow(HINSTANCE hInstance, LPTSTR windowName, int width, int height);
 	HWND GetWnd();

@@ -4,6 +4,7 @@
 #include "MyWindow.h"
 
 BOOL MyWindow::isReg = FALSE;
+int MyWindow::count = 0;
 
 MyWindow::MyWindow(HINSTANCE hInstance, LPTSTR windowName, int width, int height) {
 	hInst = hInstance;
@@ -26,6 +27,7 @@ MyWindow::MyWindow(HINSTANCE hInstance, LPTSTR windowName, int width, int height
 		NULL,
 		hInst,
 		NULL);		
+	count++;
 }
 
 void MyWindow::RegClass(LPTSTR className) {
@@ -58,8 +60,9 @@ LRESULT CALLBACK  MyWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
-		// What to do in case without PostQuitMessage(0) when we close all windows?
-		PostQuitMessage(0);
+		count--;
+		if (count == 0)
+			PostQuitMessage(0);
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);

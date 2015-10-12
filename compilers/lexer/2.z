@@ -1,1 +1,7 @@
-a = (5+ 10) / b
+Var a, b, c, D, e, fuf
+a = 5
+b = 10~
+c = a + b
+D = c * (a + b)
+e = -D + a
+fuf = (a - b) / 2.

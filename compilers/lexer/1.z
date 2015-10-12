@@ -1,4 +1,7 @@
-0123456789
-abcdefghijklmnopqrstuvwxyz
-ABCDEFGHIJKLMNOPQRSTUVWXYZ
-1 2	3
+Var a, b, c, d, e, fuf
+a = 5
+b = 10
+c = a + b
+d = c * (a + b)
+e = -d + a
+fuf = (a - b) / 2.

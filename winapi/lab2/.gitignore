@@ -1,0 +1,13 @@
+Debug/
+Release/
+x64/
+.vs/
+
+*.opensdf
+
+lab2/*.vcxproj.filters
+lab2/*.vcxproj.user
+lab2/Debug/
+lab2/Release/
+lab2/lab1.opensdf
+lab2/x64

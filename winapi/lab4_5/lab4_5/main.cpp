@@ -9,7 +9,7 @@ HINSTANCE hInst;
 #define SREEDTEXT_ID 2
 #define SPEEDSUBMITBUTTON_ID 3
 
-const int BALL_MOVE_DELTA = 10;
+const int BALL_MOVE_DELTA = 2;
 
 typedef struct _ballInfo
 {
@@ -28,7 +28,6 @@ ballInfo_t ballInfo;
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 void UpdateBall(RECT* prc);
 void DrawBall(HDC hdc, RECT* prc);
-
 
 /*
 	http://stackoverflow.com/questions/15324807/drawing-semitransparent-child-window-with-image-on-parent-window
@@ -60,7 +59,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	wcex.hInstance = hInstance;
 	wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground = (HBRUSH)(DKGRAY_BRUSH);
+	wcex.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
 	wcex.lpszMenuName = 0;
 	wcex.lpszClassName = szAppName;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
@@ -94,27 +93,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static short direction = 1;
 	const int ID_TIMER = 1;
-	static int speed = 10;
+	static int timerSpeed = 10;
 
 	int wmId, wmEvent;
 	HDC hdc;
 	BOOL fError;
 	RECT rcClient;
 
-	BOOL mode = FALSE;
-	
+	BOOL mode = FALSE;	
+	TCHAR spText[] = "Speed";
 
 	switch (message) {
 	case WM_CREATE:
 		HWND hActionTypeButton, hSpeedText, hSpeedSubmit;
-		hActionTypeButton = CreateWindow("button", "Automatically", WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 10, 132, 120, 20, hWnd, (HMENU)ACTIONSTYLEBUTTON_ID, hInst, 0);
-		hSpeedText = CreateWindow("Edit", "10", WS_BORDER | WS_CHILD | WS_VISIBLE | ES_LEFT | ES_NUMBER, 85, 10, 50, 20, hWnd, (HMENU)SREEDTEXT_ID, hInst, 0);
-		hSpeedSubmit = CreateWindow("Button", "Ïèó!", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 150, 10, 50, 20, hWnd, (HMENU)SPEEDSUBMITBUTTON_ID, hInst, 0);
+		hActionTypeButton = CreateWindow("button", "Automatically", WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 10, 10, 120, 20, hWnd, (HMENU)ACTIONSTYLEBUTTON_ID, hInst, 0);
+		hSpeedText = CreateWindow("Edit", "2", WS_BORDER | WS_CHILD | WS_VISIBLE | ES_LEFT | ES_NUMBER, 65, 50, 50, 20, hWnd, (HMENU)SREEDTEXT_ID, hInst, 0);
+		hSpeedSubmit = CreateWindow("Button", "Ïèó!", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 130, 50, 50, 20, hWnd, (HMENU)SPEEDSUBMITBUTTON_ID, hInst, 0);
 		break;
 	case WM_PAINT:
-		
 		PAINTSTRUCT ps;
 		hdc = BeginPaint(hWnd, &ps);
+
+		TextOut(hdc, 10, 50, spText, _tcslen(spText));
 
 		GetClientRect(hWnd, &rcClient);
 
@@ -132,7 +132,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			else {
 				if (ballInfo.dy > 0)
 					ballInfo.dy = -ballInfo.dy;
-				InvalidateRect(hWnd, NULL, TRUE);
+				InvalidateRect(hWnd, NULL, FALSE);
 			}
 			break;
 		case VK_DOWN:
@@ -141,7 +141,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			else {
 				if (ballInfo.dy < 0)
 					ballInfo.dy = -ballInfo.dy;		
-				InvalidateRect(hWnd, NULL, TRUE);
+				InvalidateRect(hWnd, NULL, FALSE);
 			}
 			break;
 		default:
@@ -155,7 +155,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 		case ACTIONSTYLEBUTTON_ID:
 			if (SendMessage(GetDlgItem(hWnd, ACTIONSTYLEBUTTON_ID), BM_GETCHECK, 0, 0) == BST_CHECKED) {
-				SetTimer(hWnd, ID_TIMER, speed, NULL);
+				SetTimer(hWnd, ID_TIMER, timerSpeed, NULL);
 				mode = TRUE;
 			}
 			else {
@@ -206,44 +206,16 @@ void UpdateBall(RECT* prc)
 
 void DrawBall(HDC hdc, RECT* prc)
 {
-	/*
 	HDC hdcBuffer = CreateCompatibleDC(hdc);
 	HBITMAP hbmBuffer = CreateCompatibleBitmap(hdc, prc->right, prc->bottom);
+	HPEN hPen = CreatePen(PS_SOLID, 2, RGB(255, 25, 5));
 	SelectObject(hdcBuffer, hbmBuffer);
-	//PatBlt(hdcBuffer, 0, 0, prc->right, prc->bottom, WHITENESS);
-	BitBlt(hdcBuffer, 0, 0, prc->right, prc->bottom, hdc, 0, 0, SRCCOPY);
+	SelectObject(hdcBuffer, hPen);
+	FillRect(hdcBuffer, prc, (HBRUSH)GetStockObject(LTGRAY_BRUSH));
 	Ellipse(hdcBuffer, ballInfo.x, ballInfo.y, ballInfo.x + ballInfo.width, ballInfo.y + ballInfo.height);
 	
 	BitBlt(hdc, 200, 0, prc->right-200, prc->bottom, hdcBuffer, 200, 0, SRCCOPY);
-	//BitBlt(hdc, 0, 0, prc->right, prc->bottom, hdcBuffer, 0, 0, SRCCOPY);
 
-	DeleteDC(hdcBuffer);
-	DeleteObject(hbmBuffer);
-	//PAINTSTRUCT ps;
-	//Ellipse(hdc, ballInfo.x, ballInfo.y, ballInfo.x + ballInfo.width, ballInfo.y + ballInfo.height);
-	*/
-	HDC hdcBuffer = CreateCompatibleDC(hdc);
-	HBITMAP hbmBuffer = CreateCompatibleBitmap(hdc, prc->right, prc->bottom);
-	SelectObject(hdcBuffer, hbmBuffer);
-
-	HDC hdcMem = CreateCompatibleDC(hdc);
-	HBITMAP hbmMask = CreateCompatibleBitmap(hdc, ballInfo.width, ballInfo.height);
-	SelectObject(hdcMem, hbmMask);
-
-	FillRect(hdcBuffer, prc, (HBRUSH)GetStockObject(WHITE_BRUSH));
-
-	Ellipse(hdcMem, ballInfo.x, ballInfo.y, ballInfo.x + ballInfo.width, ballInfo.y + ballInfo.height);
-
-	BitBlt(hdcBuffer, ballInfo.x, ballInfo.y, ballInfo.width, ballInfo.height, hdcMem, 0, 0, SRCINVERT);
-
-	BitBlt(hdcBuffer, ballInfo.x, ballInfo.y, ballInfo.width, ballInfo.height, hdcMem, 0, 0, SRCAND);
-
-	//SelectObject(hdcMem, g_hbmBall);
-	BitBlt(hdcBuffer, ballInfo.x, ballInfo.y, ballInfo.width, ballInfo.height, hdcMem, 0, 0, SRCINVERT);
-
-	BitBlt(hdc, 0, 0, prc->right, prc->bottom, hdcBuffer, 0, 0, SRCCOPY);
-
-	DeleteDC(hdcMem);
 	DeleteDC(hdcBuffer);
 	DeleteObject(hbmBuffer);
 }

@@ -4,6 +4,7 @@ x64/
 .vs/
 
 *.opensdf
+*.suo
 
 lab4_5/*.vcxproj.filters
 lab4_5/*.vcxproj.user

@@ -60,21 +60,8 @@ void OrangeButton::set_press(bool status, HDC hdc, HBITMAP view)
 }
 
 bool OrangeButton::checkPoint(int x, int y) {
-	int alignment = 4 - (maskWidth+1) / 8 % 4;
+	int alignment = 4 - maskWidth / 8 % 4;
 	alignment = (alignment == 4) ? 0 : alignment;
-	/*int a1 = maskHeight - y;
-	int a2 = maskWidth / 8 + alignment;
-	int a3 = x / 8;
-	int coord = a1 * a2 + a3 + 64;
-	int res = maskBits[coord];
-	return (maskBits[coord] >> (7 - (x % 8))) % 2 == 1;
-	return (bits[(windowHeight - y)  * (windowWidth / 8 + alignment) + x / 8] >> (7 - (x % 8))) % 2 && 1;*/
-
-	/*int a1 = maskHeight - y;
-	int a2 = a1 * (maskWidth/8+ alignment/8);
-	int coord = a2 + x/8;
-	int res = maskBits[coord];
-	return (maskBits[coord] >> (7 - (x % 8))) % 2 == 1;*/
 	int res = maskBits[(maskHeight - y) * (maskWidth / 8 + alignment) + x / 8];
 	return (maskBits[(maskHeight - y)  * (maskWidth / 8 + alignment) + x / 8] >> (7 - (x % 8))) % 2 && 1;
 }

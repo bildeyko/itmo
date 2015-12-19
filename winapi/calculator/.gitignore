@@ -1,0 +1,13 @@
+Debug/
+Release/
+x64/
+.vs/
+
+*.opensdf
+*.suo
+
+calculator/*.vcxproj.user
+calculator/Debug/
+calculator/Release/
+calculator/lab4_5.opensdf
+calculator/x64

@@ -120,12 +120,14 @@
   <ItemGroup>
     <ClCompile Include="DataLoader.cpp" />
     <ClCompile Include="Action.cpp" />
+    <ClCompile Include="OrangeButton.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataLoader.h" />
     <ClInclude Include="Action.h" />
+    <ClInclude Include="OrangeButton.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -133,7 +135,17 @@
     <ResourceCompile Include="player.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="active_button.bmp" />
     <Image Include="C:\Users\bilde_000\Desktop\Screenshots\1\pipboy_mask_1bit.bmp" />
+    <Image Include="img\active_button.bmp" />
+    <Image Include="img\bitmap2.bmp" />
+    <Image Include="img\center_button_mask_1bit.bmp" />
+    <Image Include="img\close_button_mask_1bit.bmp" />
+    <Image Include="img\left_button_mask_1bit.bmp" />
+    <Image Include="img\pipboy.bmp" />
+    <Image Include="img\pipboy_mask_1bit.bmp" />
+    <Image Include="img\pipboy_mask_8bit.bmp" />
+    <Image Include="img\right_button_mask_1bit.bmp" />
     <Image Include="pipboy.bmp" />
     <Image Include="pipboy_mask_1bit.bmp" />
     <Image Include="pipboy_mask_8bit.bmp" />

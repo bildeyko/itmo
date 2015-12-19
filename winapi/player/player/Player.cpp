@@ -34,6 +34,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		window->action->paintBackground(hWnd);
 		break;
 	case WM_LBUTTONDOWN:
+		int button;
+		button = window->action->which_button(LOWORD(lParam), HIWORD(lParam));
 		mouseState = 1;
 		return TRUE;
 	case WM_MOUSEMOVE:

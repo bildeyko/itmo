@@ -10,6 +10,7 @@ Action::Action(DataLoader* resources, int height, int width)
 	this->resources = resources;
 	this->width = width;
 	this->height = height;
+	is_premultipliedButtonAlpha = FALSE;
 }
 
 void Action::paintBackground(HWND hWnd) {
@@ -22,9 +23,42 @@ void Action::paintBackground(HWND hWnd, HBITMAP bitmap) {
 	HDC hdcMem = CreateCompatibleDC(hdc);
 	SelectObject(hdcMem, bitmap);
 	MaskBlt(hdc, 0, 0, this->width, this->height, hdcMem, 0, 0, resources->getHBackgroundMask1bit(), 0, 0, SRCCOPY);
+
+	//RECT rect;
+	RECT rcClient;
+	GetClientRect(hWnd, &rcClient);
+
+	if (is_premultipliedButtonAlpha == FALSE)
+		premultipliedAlpha(hdc, resources->getHOrangeButton());
+
+
+	//OrangeButton *but1 = new OrangeButton(hdc, 494, 504, resources->getHOrangeButton(), resources->getHCenterMask1bit());
+	//OrangeButton but1(LEFT_BUTTON, hdc, 494, 504, resources->getHOrangeButton(), resources->getHLeftMask1bit());
+	//buttons.push_back(but1);
+	OrangeButton but2(CENTER_BUTTON, hdc, 572, 504, resources->getHOrangeButton(), resources->getHCenterMask1bit());
+	buttons.push_back(but2);
+	//OrangeButton but3(RIGHT_BUTTON, hdc, 650, 504, resources->getHOrangeButton(), resources->getHRightMask1bit());
+	//buttons.push_back(but3);
+
+	//but1->set_press(false, hdc, resources->getHOrangeButton());
+	//OrangeButton *but2 = new OrangeButton(hdc, 572, 504, resources->getHOrangeButton(), resources->getHCenterMask1bit());
+	//OrangeButton *but3 = new OrangeButton(hdc, 650, 504, resources->getHOrangeButton(), resources->getHCenterMask1bit());
+
 	DeleteDC(hdcMem);
 	EndPaint(hWnd, &ps);
 }
+
+int Action::which_button(int x, int y)
+{
+	int button = -1;
+
+	for (vector<OrangeButton>::iterator it = buttons.begin(); it != buttons.end(); it++) {
+		if (it->checkPoint(x, y) == true)
+			button = it->id;
+	}
+	return button;
+}
+
 
 HRGN Action::BitMapToHRGN(HBITMAP hBitMap) {
 	BITMAP bm;
@@ -61,115 +95,43 @@ HRGN Action::BitMapToHRGN(HBITMAP hBitMap) {
 	}
 	DeleteObject(hMask);
 	return hRgn;
-
-	/*WORD wBmpWidth, wBmpHeight;
-
-	// the final region and a temporary region
-	HRGN hRgn, hTmpRgn;
-
-	// 24bit pixels from the bitmap
-	BYTE *pPixels = Get24BitPixels(hBitMap, &wBmpWidth, &wBmpHeight);
-	if (!pPixels) return NULL;
-
-	// create our working region
-	hRgn = CreateRectRgn(0, 0, wBmpWidth, wBmpHeight);
-	if (!hRgn) { delete pPixels; return NULL; }
-
-	// ---------------------------------------------------------
-	// scan the bitmap
-	// ---------------------------------------------------------
-	DWORD p = 0;
-	for (WORD y = 0; y<wBmpHeight; y++)
-	{
-		for (WORD x = 0; x<wBmpWidth; x++)
-		{
-			BYTE jRed = pPixels[p + 2];
-			BYTE jGreen = pPixels[p + 1];
-			BYTE jBlue = pPixels[p + 0];
-
-			if (jRed == 0 && jGreen == 0 && jBlue == 0)
-			{
-				// remove transparent color from region
-				hTmpRgn = CreateRectRgn(x, y, x + 1, y + 1);
-				CombineRgn(hRgn, hRgn, hTmpRgn, RGN_XOR);
-				DeleteObject(hTmpRgn);
-			}
-
-			// next pixel
-			p += 3;
-		}
-	}
-
-	// release pixels
-	delete pPixels;
-
-	// return the region
-	return hRgn;*/
 }
 
-BYTE* Action::Get24BitPixels(HBITMAP pBitmap, WORD *pwWidth, WORD *pwHeight)
+void Action::premultipliedAlpha(HDC hdc, HBITMAP hbm)
 {
-	// a bitmap object just to get bitmap width and height
-	BITMAP bmpBmp;
+	BITMAP bm;
+	BITMAPINFO bmi;
 
-	// pointer to original bitmap info
-	LPBITMAPINFO pbmiInfo;
+	GetObject(hbm, sizeof(bm), &bm);
 
-	// bitmap info will hold the new 24bit bitmap info
-	BITMAPINFO bmiInfo;
+	memset(&bmi, 0, sizeof(BITMAPINFO));
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmi.bmiHeader.biWidth = bm.bmWidth;
+	bmi.bmiHeader.biHeight = bm.bmHeight;
+	bmi.bmiHeader.biBitCount = 32;
+	bmi.bmiHeader.biPlanes = 1;
+	bmi.bmiHeader.biCompression = BI_RGB;
+	bmi.bmiHeader.biSizeImage = 0;
+	bmi.bmiHeader.biXPelsPerMeter = 0;
+	bmi.bmiHeader.biYPelsPerMeter = 0;
+	bmi.bmiHeader.biClrUsed = 0;
+	bmi.bmiHeader.biClrImportant = 0;
 
-	// width and height of the bitmap
-	WORD wBmpWidth, wBmpHeight;
+	DWORD dwBmpSize = ((bm.bmWidth * bmi.bmiHeader.biBitCount + 31) / 32) * 4 * bm.bmHeight;
+	HANDLE hDIB = GlobalAlloc(GHND, dwBmpSize);
+	unsigned char *lpbitmap = (unsigned char *)GlobalLock(hDIB);
 
-	// ---------------------------------------------------------
-	// get some info from the bitmap
-	// ---------------------------------------------------------
-	GetObject(pBitmap, sizeof(bmpBmp), &bmpBmp);
-	pbmiInfo = (LPBITMAPINFO)&bmpBmp;
+	GetDIBits(hdc, hbm, 0, (UINT)bm.bmHeight, lpbitmap, &bmi, DIB_RGB_COLORS);
 
-	// get width and height
-	wBmpWidth = (WORD)pbmiInfo->bmiHeader.biWidth;
-	wBmpWidth -= (wBmpWidth % 4);                       // width is 4 byte boundary aligned.
-	wBmpHeight = (WORD)pbmiInfo->bmiHeader.biHeight;
+	for (int i = 0; i < dwBmpSize; i = i + 4) {
+		unsigned char alpha = lpbitmap[i + 3];
+		lpbitmap[i] = lpbitmap[i] * alpha / 0xff;
+		lpbitmap[i + 1] = lpbitmap[i + 1] * alpha / 0xff;
+		lpbitmap[i + 2] = lpbitmap[i + 2] * alpha / 0xff;
+	}
 
-	// copy to caller width and height parms
-	*pwWidth = wBmpWidth;
-	*pwHeight = wBmpHeight;
-	// ---------------------------------------------------------
+	SetDIBits(hdc, hbm, 0, (UINT)bm.bmHeight, lpbitmap, &bmi, DIB_RGB_COLORS);
 
-	// allocate width * height * 24bits pixels
-	BYTE *pPixels = new BYTE[wBmpWidth*wBmpHeight * 3];
-	if (!pPixels) return NULL;
-
-	// get user desktop device context to get pixels from
-	HDC hDC = GetWindowDC(NULL);
-
-	// fill desired structure
-	bmiInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	bmiInfo.bmiHeader.biWidth = wBmpWidth;
-	bmiInfo.bmiHeader.biHeight = -wBmpHeight;
-	bmiInfo.bmiHeader.biPlanes = 1;
-	bmiInfo.bmiHeader.biBitCount = 24;
-	bmiInfo.bmiHeader.biCompression = BI_RGB;
-	bmiInfo.bmiHeader.biSizeImage = wBmpWidth*wBmpHeight * 3;
-	bmiInfo.bmiHeader.biXPelsPerMeter = 0;
-	bmiInfo.bmiHeader.biYPelsPerMeter = 0;
-	bmiInfo.bmiHeader.biClrUsed = 0;
-	bmiInfo.bmiHeader.biClrImportant = 0;
-
-	// get pixels from the original bitmap converted to 24bits
-	int iRes = GetDIBits(hDC, pBitmap, 0, wBmpHeight, (LPVOID)pPixels, &bmiInfo, DIB_RGB_COLORS);
-
-	// release the device context
-	ReleaseDC(NULL, hDC);
-
-	// if failed, cancel the operation.
-	if (!iRes)
-	{
-		delete pPixels;
-		return NULL;
-	};
-
-	// return the pixel array
-	return pPixels;
+	GlobalUnlock(hDIB);
+	GlobalFree(hDIB);
 }

@@ -1,0 +1,14 @@
+Debug/
+Release/
+x64/
+.vs/
+
+*.opensdf
+*.suo
+
+player/*.vcxproj.filters
+player/*.vcxproj.user
+player/Debug/
+player/Release/
+player/lab4_5.opensdf
+player/x64

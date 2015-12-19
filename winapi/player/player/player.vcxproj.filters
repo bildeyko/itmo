@@ -27,6 +27,9 @@
     <ClCompile Include="Action.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OrangeButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Action.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OrangeButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -61,6 +67,36 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="pipboy_mask_8bit_copy.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="active_button.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\pipboy.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\pipboy_mask_8bit.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\pipboy_mask_1bit.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\active_button.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\center_button_mask_1bit.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\left_button_mask_1bit.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\bitmap2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\right_button_mask_1bit.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\close_button_mask_1bit.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

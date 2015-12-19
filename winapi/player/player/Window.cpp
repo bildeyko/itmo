@@ -50,6 +50,8 @@ int Window::createWindow(TCHAR* title, DataLoader* resources) {
 	}
 	HRGN hWindowRegion = action->BitMapToHRGN(resources->getHBackgroundMask8bit());
 	SetWindowRgn(hWnd, hWindowRegion, TRUE);
+
+	DeleteObject(hWindowRegion);
 	return 0;
 }
 

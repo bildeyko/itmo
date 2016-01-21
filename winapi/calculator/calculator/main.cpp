@@ -270,15 +270,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					}
 					case OPC:					// C clicked
 					{
-						strcpy(stringBuffer, "0\0");
+						/*strcpy(stringBuffer, "0\0");
 						calculate->~Calculator();
 						calculate = new Calculator();
 						SetWindowText(htextbox, stringBuffer);
+						calculate->setSystem(calcSystem);
 						newNumber = 1;					// Set new digit
 						nFunc = 0;					// set function to none
 						dot = false;
 						lastOperand = 0;
 						backsp = false;
+						break;*/
+						strcpy(stringBuffer, "0\0");
+						calculate->setOperand(stringBuffer, calcSystem, 1);
+						SetWindowText(htextbox, stringBuffer);
+						newNumber = 1;			// Set new digit
+						dot = false;
+						lastOperand = OPCE;
 						break;
 					}
 					case OPCE:				// CE clicked
@@ -537,6 +545,7 @@ void changeNum(HMENU hMenu, HWND hWnd, int wmId){
 			EnableWindow(GetDlgItem(hWnd, i), true);
 		prevCalcSystem = calcSystem;
 		calcSystem = wmId - 3000;
+		calculate->setSystem(calcSystem);
 		double buffer = calculate->doubleConverttoDec(stringBuffer, prevCalcSystem);
 		strcpy(stringBuffer, "\0");
 		char sign = (stringBuffer[0] == '-') ? '-' : '0';
